@@ -4,9 +4,23 @@
     ],
     "types": [
         {
+            "name": "Xamarin.Forms.View",
+            "members": [
+                { "name": "HorizontalOptions" },
+                { "name": "VerticalOptions" },
+                { "name": "Margin" }
+            ]
+        },
+        {
             "name": "Xamarin.Forms.Button",
             "members": [
                 { "name": "Text" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.ContentView",
+            "members": [
+                { "name": "Content" }
             ]
         }
     ]

@@ -17,7 +17,7 @@ namespace Generator
         // Output
         public List<AssemblyDefinition> AssemblyDefinitions { get; set; }
 
-        public TypeDefinition GetType(string name) =>
+        public TypeDefinition GetTypeDefinition(string name) =>
             (from a in AssemblyDefinitions
              from m in a.Modules
              from t in m.Types
@@ -43,6 +43,13 @@ namespace Generator
 
         // Output
         public MemberReference Definition { get; set; }
+
+        public TypeReference BoundType =>
+            (Definition is PropertyDefinition p) ?
+                p.PropertyType : 
+                ((EventDefinition)Definition).EventType;
+
+        public string LowerName => char.ToLowerInvariant (Name[0]) + Name.Substring (1);
     }
 
     class Program
@@ -57,9 +64,12 @@ namespace Generator
 
                 bindings.AssemblyDefinitions = bindings.Assemblies.Select(LoadAssembly).ToList();
 
-                Parallel.ForEach (bindings.Types, x => BindType (x, bindings));
+                foreach (var x in bindings.Types)
+                    x.Definition = bindings.GetTypeDefinition (x.Name);
+                foreach (var x in bindings.Types)
+                    BindType (x, bindings);
 
-                var code = String.Join ("\n\n", bindings.Types.Select(x => x.BoundCode));
+                var code = String.Join ("\n", bindings.Types.Select(x => x.BoundCode));
 
                 File.WriteAllText (outputPath, code);
                 return 0;
@@ -73,35 +83,75 @@ namespace Generator
         static void BindType (TypeBinding type, Bindings bindings)
         {
             try {
-                var t = bindings.GetType (type.Name);
-                type.Definition = t;
+                var t = type.Definition;
+                var h = GetHierarchy (type.Definition);
+                var bh = h.Select (x => bindings.Types.FirstOrDefault(y => y.Name == x.FullName))
+                          .Where (x => x != null)
+                          .ToList ();
 
                 foreach (var m in type.Members) {
                     if (FindProperty (m.Name, t) is PropertyDefinition p) {
                         m.Definition = p;
-                        BindProperty (m, type);
                     }
                     else if (FindEvent (m.Name, t) is EventDefinition e) {
                         m.Definition = e;
-                        BindProperty (m, type);
                     }
                     else {
                         throw new Exception ($"Could not find member `{m.Name}`");
                     }
                 }
+
+                var w = new StringWriter ();
+                w.Write ($"public partial class {t.Name}");
+                var baseType = bh.Count > 1 ? bh[1] : null;
+                if (baseType != null)
+                    w.WriteLine ($" : {baseType.Definition.Name}");
+                else
+                    w.WriteLine ();
+                w.WriteLine ("{");
+
+                var allmembers = (from x in bh from y in x.Members select y).ToList ();
+
+                foreach (var m in type.Members) {
+                    w.WriteLine ($"\tpublic {Name(m.BoundType)} {m.Name} {{ get; }}");
+                }
+
+                w.Write ($"\tpublic {t.Name}(");
+                var head = "";
+                foreach (var m in allmembers) {
+                    w.Write ($"{head}{Name(m.BoundType)} {m.LowerName}");
+                    head = ", ";
+                }
+                w.Write($")");
+                if (baseType != null) {
+                    w.WriteLine();
+                    w.Write("\t\t: base(");
+                    head = "";
+                    foreach (var m in baseType.Members) {
+                        w.Write ($"{head}{m.LowerName}");
+                        head = ", ";
+                    }
+                    w.Write($")");
+                }
+                w.WriteLine(" {");
+                w.WriteLine ("\t}");
+
+                w.WriteLine ("}");
                 
-                type.BoundCode = t.Name + " " + t.Properties.Count;
+                type.BoundCode = w.ToString ();
             }
             catch (Exception ex) {
                 type.BoundCode = "/* " + ex + " */";
             }
         }
 
-        static void BindProperty(MemberBinding m, TypeBinding t)
+        static string Name (TypeReference t)
         {
-            var p = (PropertyDefinition)m.Definition;
-
-            throw new NotImplementedException();
+            switch (t.FullName) {
+                case "System.String": return "string";
+                case "System.Int32": return "int";
+                default: return t.FullName;
+            }
         }
 
         static PropertyDefinition FindProperty(string name, TypeDefinition type)
