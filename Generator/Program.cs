@@ -34,12 +34,16 @@ namespace Generator
         // Output
         public string BoundCode { get; set; }
         public TypeDefinition Definition { get; set; }
+
+        public string BoundName => Definition.Name + "Model";
     }
 
     class MemberBinding
     {
         // Input
         public string Name { get; set; }
+        public string Default { get; set; }
+        public string ConstDefault { get; set; }
 
         // Output
         public MemberReference Definition { get; set; }
@@ -50,6 +54,8 @@ namespace Generator
                 ((EventDefinition)Definition).EventType;
 
         public string LowerName => char.ToLowerInvariant (Name[0]) + Name.Substring (1);
+
+        public string BoundConstDefault => string.IsNullOrEmpty(ConstDefault) ? Default : ConstDefault;
     }
 
     class Program
@@ -82,6 +88,18 @@ namespace Generator
 
         static void BindType (TypeBinding type, Bindings bindings)
         {
+            string Name (TypeReference t)
+            {
+                switch (t.FullName) {
+                    case "System.String": return "string";
+                    case "System.Int32": return "int";
+                    default:
+                        if (bindings.Types.FirstOrDefault (x => x.Name == t.FullName) is TypeBinding tb)
+                            return tb.BoundName;
+                        return t.FullName;
+                }
+            }
+
             try {
                 var t = type.Definition;
                 var h = GetHierarchy (type.Definition);
@@ -102,24 +120,30 @@ namespace Generator
                 }
 
                 var w = new StringWriter ();
-                w.Write ($"public partial class {t.Name}");
+                w.Write ($"public partial class {type.BoundName}");
                 var baseType = bh.Count > 1 ? bh[1] : null;
                 if (baseType != null)
-                    w.WriteLine ($" : {baseType.Definition.Name}");
+                    w.WriteLine ($" : {baseType.BoundName}");
                 else
                     w.WriteLine ();
                 w.WriteLine ("{");
 
+                //
+                // Properties
+                //
                 var allmembers = (from x in bh from y in x.Members select y).ToList ();
 
                 foreach (var m in type.Members) {
                     w.WriteLine ($"\tpublic {Name(m.BoundType)} {m.Name} {{ get; }}");
                 }
 
-                w.Write ($"\tpublic {t.Name}(");
+                //
+                // Constructor
+                //
+                w.Write ($"\tpublic {type.BoundName}(");
                 var head = "";
                 foreach (var m in allmembers) {
-                    w.Write ($"{head}{Name(m.BoundType)} {m.LowerName}");
+                    w.Write ($"{head}{Name(m.BoundType)} {m.LowerName} = {m.BoundConstDefault}");
                     head = ", ";
                 }
                 w.Write($")");
@@ -134,7 +158,30 @@ namespace Generator
                     w.Write($")");
                 }
                 w.WriteLine(" {");
+                foreach (var m in type.Members) {
+                    var v = m.LowerName;
+                    if (m.BoundConstDefault != m.Default)
+                        v = $"{m.LowerName} == {m.ConstDefault} ? {m.Default} : {m.LowerName}";
+                    w.WriteLine ($"\t\t{m.Name} = {v};");
+                }
                 w.WriteLine ("\t}");
+
+                //
+                // With*
+                //
+                foreach (var m in allmembers) {
+                    var owned = type.Members.Contains(m);
+                    var newm = owned ? "" : " new";
+                    w.Write ($"\tpublic{newm} {type.BoundName} With{m.Name}({Name(m.BoundType)} {m.LowerName}) => new {type.BoundName}(");
+                    head = "";
+                    foreach (var o in allmembers) {
+                        var v = o == m ? m.LowerName : o.Name;
+                        w.Write ($"{head}{v}");
+                        head = ", ";
+                    }
+                    w.WriteLine (");");
+                }
+
 
                 w.WriteLine ("}");
                 
@@ -142,15 +189,6 @@ namespace Generator
             }
             catch (Exception ex) {
                 type.BoundCode = "/* " + ex + " */";
-            }
-        }
-
-        static string Name (TypeReference t)
-        {
-            switch (t.FullName) {
-                case "System.String": return "string";
-                case "System.Int32": return "int";
-                default: return t.FullName;
             }
         }
 

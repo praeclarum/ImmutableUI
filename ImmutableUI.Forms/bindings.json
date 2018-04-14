@@ -4,23 +4,68 @@
     ],
     "types": [
         {
+            "name": "Xamarin.Forms.LayoutOptions",
+            "members": [
+                { "name": "Alignment", "default": "Xamarin.Forms.LayoutAlignment.Fill" },
+                { "name": "Expands", "default": "false" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.Element",
+            "members": [
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.VisualElement",
+            "members": [
+                { "name": "BackgroundColor", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" },
+                { "name": "IsEnabled", "default": "true" }
+            ]
+        },
+        {
             "name": "Xamarin.Forms.View",
             "members": [
-                { "name": "HorizontalOptions" },
-                { "name": "VerticalOptions" },
-                { "name": "Margin" }
+                { "name": "HorizontalOptions", "default": "null" },
+                { "name": "VerticalOptions", "default": "null" },
+                { "name": "Margin", "default": "default(Xamarin.Forms.Thickness)" }
             ]
         },
         {
             "name": "Xamarin.Forms.Button",
             "members": [
-                { "name": "Text" }
+                { "name": "Text", "default": "\"\"" }
             ]
         },
         {
             "name": "Xamarin.Forms.ContentView",
             "members": [
-                { "name": "Content" }
+                { "name": "Content", "default": "null" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.Page",
+            "members": [
+                { "name": "Title", "default": "\"\"" },
+                { "name": "Padding", "default": "default(Xamarin.Forms.Thickness)" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.ContentPage",
+            "members": [
+                { "name": "Content", "default": "null" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.Cell",
+            "members": [
+                { "name": "Height", "default": "-1" },
+                { "name": "IsEnabled", "default": "true" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.ViewCell",
+            "members": [
+                { "name": "View", "default": "null" }
             ]
         }
     ]
