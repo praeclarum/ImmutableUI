@@ -1,0 +1,13 @@
+{
+    "assemblies": [
+        "packages/xamarin.forms/2.5.1.444934/lib/netstandard1.0/Xamarin.Forms.Core.dll"
+    ],
+    "types": [
+        {
+            "name": "Xamarin.Forms.Button",
+            "members": [
+                { "name": "Text" }
+            ]
+        }
+    ]
+}
