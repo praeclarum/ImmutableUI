@@ -4,13 +4,6 @@
     ],
     "types": [
         {
-            "name": "Xamarin.Forms.LayoutOptions",
-            "members": [
-                { "name": "Alignment", "default": "Xamarin.Forms.LayoutAlignment.Fill" },
-                { "name": "Expands", "default": "false" }
-            ]
-        },
-        {
             "name": "Xamarin.Forms.Element",
             "members": [
             ]
@@ -20,6 +13,13 @@
             "members": [
                 { "name": "BackgroundColor", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" },
                 { "name": "IsEnabled", "default": "true" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.LayoutOptions",
+            "members": [
+                { "name": "Alignment", "default": "Xamarin.Forms.LayoutAlignment.Fill" },
+                { "name": "Expands", "default": "false" }
             ]
         },
         {

@@ -23,6 +23,8 @@ namespace Generator
              from t in m.Types
              where t.FullName == name
              select t).First();
+
+        public TypeBinding FindType (string name) => Types.FirstOrDefault (x => x.Name == name);
     }
 
     class TypeBinding
@@ -72,6 +74,19 @@ namespace Generator
 
                 foreach (var x in bindings.Types)
                     x.Definition = bindings.GetTypeDefinition (x.Name);
+                foreach (var x in bindings.Types) {
+                    foreach (var m in x.Members) {
+                        if (FindProperty (m.Name, x.Definition) is PropertyDefinition p) {
+                            m.Definition = p;
+                        }
+                        else if (FindEvent (m.Name, x.Definition) is EventDefinition e) {
+                            m.Definition = e;
+                        }
+                        else {
+                            throw new Exception ($"Could not find member `{m.Name}`");
+                        }
+                    }
+                }
                 foreach (var x in bindings.Types)
                     BindType (x, bindings);
 
@@ -92,7 +107,10 @@ namespace Generator
             {
                 switch (t.FullName) {
                     case "System.String": return "string";
+                    case "System.Boolean": return "bool";
                     case "System.Int32": return "int";
+                    case "System.Double": return "double";
+                    case "System.Single": return "float";
                     default:
                         if (bindings.Types.FirstOrDefault (x => x.Name == t.FullName) is TypeBinding tb)
                             return tb.BoundName;
@@ -107,17 +125,10 @@ namespace Generator
                           .Where (x => x != null)
                           .ToList ();
 
-                foreach (var m in type.Members) {
-                    if (FindProperty (m.Name, t) is PropertyDefinition p) {
-                        m.Definition = p;
-                    }
-                    else if (FindEvent (m.Name, t) is EventDefinition e) {
-                        m.Definition = e;
-                    }
-                    else {
-                        throw new Exception ($"Could not find member `{m.Name}`");
-                    }
-                }
+                var ctor = t.Methods
+                    .Where (x => x.IsConstructor && x.IsPublic)
+                    .OrderBy (x => x.Parameters.Count)
+                    .FirstOrDefault ();
 
                 var w = new StringWriter ();
                 w.Write ($"public partial class {type.BoundName}");
@@ -182,6 +193,51 @@ namespace Generator
                     w.WriteLine (");");
                 }
 
+                //
+                // Creates
+                //
+                if (t.IsAbstract || ctor == null || ctor.Parameters.Count != 0) {
+                    w.WriteLine ($"\tpublic virtual {t.FullName} Create{t.Name}() => throw new System.NotSupportedException(\"Cannot create {t.FullName} from \" + GetType().FullName);");
+                }
+                else {
+                    w.WriteLine ($"\tpublic virtual {t.FullName} Create{t.Name}() {{");
+                    w.WriteLine ($"\t\tvar target = new {t.FullName}();");
+                    w.WriteLine ($"\t\tApply(target);");
+                    w.WriteLine ($"\t\treturn target;");
+                    w.WriteLine ("\t}");
+                    foreach (var b in bh.Skip(1)) {
+                        w.WriteLine ($"\tpublic override {b.Definition.FullName} Create{b.Definition.Name}() => Create{t.Name}();");
+                    }
+                }                    
+
+                //
+                // Apply
+                //
+                var refToken = t.IsValueType ? "ref " : "";
+                w.WriteLine ($"\tpublic virtual void Apply({refToken}{t.FullName} target) {{");
+                if (baseType != null)
+                    w.WriteLine ($"\t\tbase.Apply(target);");
+                foreach (var m in type.Members) {
+                    if (bindings.FindType (m.BoundType.FullName) is TypeBinding b) {
+                        if (m.BoundType.IsValueType) {
+                            w.WriteLine ($"\t\ttarget.{m.Name} = {m.Name}.Create{m.BoundType.Name}();");
+                        }
+                        else {
+                            w.WriteLine ($"\t\tif (target.{m.Name} != null) {m.Name}.Apply(target.{m.Name});");
+                            w.WriteLine ($"\t\telse target.{m.Name} = {m.Name}.Create{m.BoundType.Name}();");
+                        }
+                    }
+                    else {
+                        w.WriteLine ($"\t\ttarget.{m.Name} = {m.Name};");
+                    }
+                }
+                w.WriteLine ("\t}");
+                foreach (var b in bh.Skip(1)) {
+                    w.WriteLine ($"\tpublic override void Apply({b.Definition.FullName} target) {{");
+                    w.WriteLine ($"\t\tif (target is {t.FullName} t) Apply(t);");
+                    w.WriteLine ($"\t\telse base.Apply(target);");
+                    w.WriteLine ("\t}");
+                }
 
                 w.WriteLine ("}");
                 
