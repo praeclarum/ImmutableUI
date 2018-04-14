@@ -16,8 +16,8 @@ public partial class VisualElementModel : ElementModel
 		BackgroundColor = backgroundColor == default(Xamarin.Forms.Color) ? Xamarin.Forms.Color.Default : backgroundColor;
 		IsEnabled = isEnabled;
 	}
-	public VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new VisualElementModel(backgroundColor, IsEnabled);
-	public VisualElementModel WithIsEnabled(bool isEnabled) => new VisualElementModel(BackgroundColor, isEnabled);
+	public virtual VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new VisualElementModel(backgroundColor, IsEnabled);
+	public virtual VisualElementModel WithIsEnabled(bool isEnabled) => new VisualElementModel(BackgroundColor, isEnabled);
 	public virtual Xamarin.Forms.VisualElement CreateVisualElement() => throw new System.NotSupportedException("Cannot create Xamarin.Forms.VisualElement from " + GetType().FullName);
 	public virtual void Apply(Xamarin.Forms.VisualElement target) {
 		base.Apply(target);
@@ -38,8 +38,8 @@ public partial class LayoutOptionsModel
 		Alignment = alignment;
 		Expands = expands;
 	}
-	public LayoutOptionsModel WithAlignment(Xamarin.Forms.LayoutAlignment alignment) => new LayoutOptionsModel(alignment, Expands);
-	public LayoutOptionsModel WithExpands(bool expands) => new LayoutOptionsModel(Alignment, expands);
+	public virtual LayoutOptionsModel WithAlignment(Xamarin.Forms.LayoutAlignment alignment) => new LayoutOptionsModel(alignment, Expands);
+	public virtual LayoutOptionsModel WithExpands(bool expands) => new LayoutOptionsModel(Alignment, expands);
 	public virtual Xamarin.Forms.LayoutOptions CreateLayoutOptions() => throw new System.NotSupportedException("Cannot create Xamarin.Forms.LayoutOptions from " + GetType().FullName);
 	public virtual void Apply(ref Xamarin.Forms.LayoutOptions target) {
 		target.Alignment = Alignment;
@@ -58,11 +58,11 @@ public partial class ViewModel : VisualElementModel
 		VerticalOptions = verticalOptions;
 		Margin = margin;
 	}
-	public ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ViewModel(horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsEnabled);
-	public ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ViewModel(HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsEnabled);
-	public ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new ViewModel(HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsEnabled);
-	public new ViewModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ViewModel(HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsEnabled);
-	public new ViewModel WithIsEnabled(bool isEnabled) => new ViewModel(HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isEnabled);
+	public virtual ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ViewModel(horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsEnabled);
+	public virtual ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ViewModel(HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsEnabled);
+	public virtual ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new ViewModel(HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsEnabled);
+	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ViewModel(HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsEnabled);
+	public override VisualElementModel WithIsEnabled(bool isEnabled) => new ViewModel(HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isEnabled);
 	public virtual Xamarin.Forms.View CreateView() => throw new System.NotSupportedException("Cannot create Xamarin.Forms.View from " + GetType().FullName);
 	public virtual void Apply(Xamarin.Forms.View target) {
 		base.Apply(target);
@@ -87,12 +87,12 @@ public partial class ButtonModel : ViewModel
 		: base(horizontalOptions, verticalOptions, margin) {
 		Text = text;
 	}
-	public ButtonModel WithText(string text) => new ButtonModel(text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsEnabled);
-	public new ButtonModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ButtonModel(Text, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsEnabled);
-	public new ButtonModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ButtonModel(Text, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsEnabled);
-	public new ButtonModel WithMargin(Xamarin.Forms.Thickness margin) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsEnabled);
-	public new ButtonModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsEnabled);
-	public new ButtonModel WithIsEnabled(bool isEnabled) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isEnabled);
+	public virtual ButtonModel WithText(string text) => new ButtonModel(text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsEnabled);
+	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ButtonModel(Text, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsEnabled);
+	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ButtonModel(Text, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsEnabled);
+	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsEnabled);
+	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsEnabled);
+	public override VisualElementModel WithIsEnabled(bool isEnabled) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isEnabled);
 	public virtual Xamarin.Forms.Button CreateButton() {
 		var target = new Xamarin.Forms.Button();
 		Apply(target);
@@ -126,12 +126,12 @@ public partial class ContentViewModel : ViewModel
 		: base(horizontalOptions, verticalOptions, margin) {
 		Content = content;
 	}
-	public ContentViewModel WithContent(ViewModel content) => new ContentViewModel(content, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsEnabled);
-	public new ContentViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ContentViewModel(Content, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsEnabled);
-	public new ContentViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ContentViewModel(Content, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsEnabled);
-	public new ContentViewModel WithMargin(Xamarin.Forms.Thickness margin) => new ContentViewModel(Content, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsEnabled);
-	public new ContentViewModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ContentViewModel(Content, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsEnabled);
-	public new ContentViewModel WithIsEnabled(bool isEnabled) => new ContentViewModel(Content, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isEnabled);
+	public virtual ContentViewModel WithContent(ViewModel content) => new ContentViewModel(content, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsEnabled);
+	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ContentViewModel(Content, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsEnabled);
+	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ContentViewModel(Content, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsEnabled);
+	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new ContentViewModel(Content, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsEnabled);
+	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ContentViewModel(Content, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsEnabled);
+	public override VisualElementModel WithIsEnabled(bool isEnabled) => new ContentViewModel(Content, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isEnabled);
 	public virtual Xamarin.Forms.ContentView CreateContentView() {
 		var target = new Xamarin.Forms.ContentView();
 		Apply(target);
@@ -168,10 +168,10 @@ public partial class PageModel : VisualElementModel
 		Title = title;
 		Padding = padding;
 	}
-	public PageModel WithTitle(string title) => new PageModel(title, Padding, BackgroundColor, IsEnabled);
-	public PageModel WithPadding(Xamarin.Forms.Thickness padding) => new PageModel(Title, padding, BackgroundColor, IsEnabled);
-	public new PageModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new PageModel(Title, Padding, backgroundColor, IsEnabled);
-	public new PageModel WithIsEnabled(bool isEnabled) => new PageModel(Title, Padding, BackgroundColor, isEnabled);
+	public virtual PageModel WithTitle(string title) => new PageModel(title, Padding, BackgroundColor, IsEnabled);
+	public virtual PageModel WithPadding(Xamarin.Forms.Thickness padding) => new PageModel(Title, padding, BackgroundColor, IsEnabled);
+	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new PageModel(Title, Padding, backgroundColor, IsEnabled);
+	public override VisualElementModel WithIsEnabled(bool isEnabled) => new PageModel(Title, Padding, BackgroundColor, isEnabled);
 	public virtual Xamarin.Forms.Page CreatePage() {
 		var target = new Xamarin.Forms.Page();
 		Apply(target);
@@ -201,11 +201,11 @@ public partial class ContentPageModel : PageModel
 		: base(title, padding) {
 		Content = content;
 	}
-	public ContentPageModel WithContent(ViewModel content) => new ContentPageModel(content, Title, Padding, BackgroundColor, IsEnabled);
-	public new ContentPageModel WithTitle(string title) => new ContentPageModel(Content, title, Padding, BackgroundColor, IsEnabled);
-	public new ContentPageModel WithPadding(Xamarin.Forms.Thickness padding) => new ContentPageModel(Content, Title, padding, BackgroundColor, IsEnabled);
-	public new ContentPageModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ContentPageModel(Content, Title, Padding, backgroundColor, IsEnabled);
-	public new ContentPageModel WithIsEnabled(bool isEnabled) => new ContentPageModel(Content, Title, Padding, BackgroundColor, isEnabled);
+	public virtual ContentPageModel WithContent(ViewModel content) => new ContentPageModel(content, Title, Padding, BackgroundColor, IsEnabled);
+	public override PageModel WithTitle(string title) => new ContentPageModel(Content, title, Padding, BackgroundColor, IsEnabled);
+	public override PageModel WithPadding(Xamarin.Forms.Thickness padding) => new ContentPageModel(Content, Title, padding, BackgroundColor, IsEnabled);
+	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ContentPageModel(Content, Title, Padding, backgroundColor, IsEnabled);
+	public override VisualElementModel WithIsEnabled(bool isEnabled) => new ContentPageModel(Content, Title, Padding, BackgroundColor, isEnabled);
 	public virtual Xamarin.Forms.ContentPage CreateContentPage() {
 		var target = new Xamarin.Forms.ContentPage();
 		Apply(target);
@@ -242,8 +242,8 @@ public partial class CellModel : ElementModel
 		Height = height;
 		IsEnabled = isEnabled;
 	}
-	public CellModel WithHeight(double height) => new CellModel(height, IsEnabled);
-	public CellModel WithIsEnabled(bool isEnabled) => new CellModel(Height, isEnabled);
+	public virtual CellModel WithHeight(double height) => new CellModel(height, IsEnabled);
+	public virtual CellModel WithIsEnabled(bool isEnabled) => new CellModel(Height, isEnabled);
 	public virtual Xamarin.Forms.Cell CreateCell() => throw new System.NotSupportedException("Cannot create Xamarin.Forms.Cell from " + GetType().FullName);
 	public virtual void Apply(Xamarin.Forms.Cell target) {
 		base.Apply(target);
@@ -263,9 +263,9 @@ public partial class ViewCellModel : CellModel
 		: base(height, isEnabled) {
 		View = view;
 	}
-	public ViewCellModel WithView(ViewModel view) => new ViewCellModel(view, Height, IsEnabled);
-	public new ViewCellModel WithHeight(double height) => new ViewCellModel(View, height, IsEnabled);
-	public new ViewCellModel WithIsEnabled(bool isEnabled) => new ViewCellModel(View, Height, isEnabled);
+	public virtual ViewCellModel WithView(ViewModel view) => new ViewCellModel(view, Height, IsEnabled);
+	public override CellModel WithHeight(double height) => new ViewCellModel(View, height, IsEnabled);
+	public override CellModel WithIsEnabled(bool isEnabled) => new ViewCellModel(View, Height, isEnabled);
 	public virtual Xamarin.Forms.ViewCell CreateViewCell() {
 		var target = new Xamarin.Forms.ViewCell();
 		Apply(target);

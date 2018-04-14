@@ -181,9 +181,13 @@ namespace Generator
                 // With*
                 //
                 foreach (var m in allmembers) {
-                    var owned = type.Members.Contains(m);
-                    var newm = owned ? "" : " new";
-                    w.Write ($"\tpublic{newm} {type.BoundName} With{m.Name}({Name(m.BoundType)} {m.LowerName}) => new {type.BoundName}(");
+                    var owner = bh.FirstOrDefault (x => x.Members.Contains(m));
+                    if (owner == type) {
+                        w.Write ($"\tpublic virtual {type.BoundName} With{m.Name}({Name(m.BoundType)} {m.LowerName}) => new {type.BoundName}(");
+                    }
+                    else {
+                        w.Write ($"\tpublic override {owner.BoundName} With{m.Name}({Name(m.BoundType)} {m.LowerName}) => new {type.BoundName}(");
+                    }
                     head = "";
                     foreach (var o in allmembers) {
                         var v = o == m ? m.LowerName : o.Name;
