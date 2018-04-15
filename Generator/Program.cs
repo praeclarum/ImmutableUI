@@ -116,6 +116,11 @@ namespace Generator
                         var r = ResolveGenericParameter (tref, h);                      
                         return Name (r);
                     }
+                    if (tref.IsGenericInstance) {  
+                        var n = tref.Name.Substring (0, tref.Name.IndexOf('`'));
+                        var args = string.Join(", ", ((GenericInstanceType)tref).GenericArguments.Select(Name));
+                        return $"{tref.Namespace}.{n}<{args}>";
+                    }
                     switch (tref.FullName) {
                         case "System.String": return "string";
                         case "System.Boolean": return "bool";

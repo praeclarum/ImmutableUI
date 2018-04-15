@@ -108,6 +108,25 @@
             ]
         },
         {
+            "name": "Xamarin.Forms.Layout",
+            "members": [
+                { "name": "IsClippedToBounds", "default": "false" },
+                { "name": "Padding", "default": "default(Xamarin.Forms.Thickness)" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.RelativeLayout",
+            "members": [
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.StackLayout",
+            "members": [
+                { "name": "Orientation", "default": "Xamarin.Forms.StackOrientation.Vertical" },
+                { "name": "Spacing", "default": "6" }
+            ]
+        },
+        {
             "name": "Xamarin.Forms.TimePicker",
             "members": [
                 { "name": "Time", "default": "new System.TimeSpan(0)", "constDefault": "default(System.TimeSpan)" },
