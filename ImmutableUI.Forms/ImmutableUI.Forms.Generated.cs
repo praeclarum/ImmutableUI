@@ -70,47 +70,19 @@ public partial class VisualElementModel : ElementModel
 	}
 }
 
-public partial class LayoutOptionsModel
-{
-	public Xamarin.Forms.LayoutAlignment Alignment { get; }
-	public bool Expands { get; }
-	public LayoutOptionsModel(Xamarin.Forms.LayoutAlignment alignment = Xamarin.Forms.LayoutAlignment.Fill, bool expands = false) {
-		Alignment = alignment;
-		Expands = expands;
-	}
-	public virtual LayoutOptionsModel WithAlignment(Xamarin.Forms.LayoutAlignment alignment) => new LayoutOptionsModel(alignment, Expands);
-	public virtual LayoutOptionsModel WithExpands(bool expands) => new LayoutOptionsModel(Alignment, expands);
-	public override bool Equals(object obj) {
-		if (obj == null || GetType() != obj.GetType()) return false;
-		var o = (LayoutOptionsModel)obj;
-		return Alignment == o.Alignment && Expands == o.Expands;
-	}
-	public override int GetHashCode() {
-		var hash = 17;
-		hash = hash * 37 + Alignment.GetHashCode();
-		hash = hash * 37 + Expands.GetHashCode();
-		return hash;
-	}
-	public virtual Xamarin.Forms.LayoutOptions CreateLayoutOptions() => throw new System.NotSupportedException("Cannot create Xamarin.Forms.LayoutOptions from " + GetType().FullName);
-	public virtual void Apply(ref Xamarin.Forms.LayoutOptions target) {
-		target.Alignment = Alignment;
-		target.Expands = Expands;
-	}
-}
-
 public partial class ViewModel : VisualElementModel
 {
-	public LayoutOptionsModel HorizontalOptions { get; }
-	public LayoutOptionsModel VerticalOptions { get; }
+	public Xamarin.Forms.LayoutOptions HorizontalOptions { get; }
+	public Xamarin.Forms.LayoutOptions VerticalOptions { get; }
 	public Xamarin.Forms.Thickness Margin { get; }
-	public ViewModel(LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public ViewModel(Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		HorizontalOptions = horizontalOptions;
 		VerticalOptions = verticalOptions;
 		Margin = margin;
 	}
-	public virtual ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ViewModel(horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public virtual ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ViewModel(HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new ViewModel(horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new ViewModel(HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new ViewModel(HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ViewModel(HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new ViewModel(HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -121,7 +93,7 @@ public partial class ViewModel : VisualElementModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (ViewModel)obj;
-		return HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -133,8 +105,8 @@ public partial class ViewModel : VisualElementModel
 	public virtual Xamarin.Forms.View CreateView() => throw new System.NotSupportedException("Cannot create Xamarin.Forms.View from " + GetType().FullName);
 	public virtual void Apply(Xamarin.Forms.View target) {
 		base.Apply(target);
-		target.HorizontalOptions = HorizontalOptions.CreateLayoutOptions();
-		target.VerticalOptions = VerticalOptions.CreateLayoutOptions();
+		target.HorizontalOptions = HorizontalOptions;
+		target.VerticalOptions = VerticalOptions;
 		target.Margin = Margin;
 	}
 	public override void Apply(Xamarin.Forms.VisualElement target) {
@@ -150,13 +122,13 @@ public partial class ViewModel : VisualElementModel
 public partial class BoxViewModel : ViewModel
 {
 	public Xamarin.Forms.Color Color { get; }
-	public BoxViewModel(Xamarin.Forms.Color color = default(Xamarin.Forms.Color), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public BoxViewModel(Xamarin.Forms.Color color = default(Xamarin.Forms.Color), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(horizontalOptions, verticalOptions, margin) {
 		Color = color == default(Xamarin.Forms.Color) ? Xamarin.Forms.Color.Default : color;
 	}
 	public virtual BoxViewModel WithColor(Xamarin.Forms.Color color) => new BoxViewModel(color, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new BoxViewModel(Color, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new BoxViewModel(Color, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new BoxViewModel(Color, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new BoxViewModel(Color, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new BoxViewModel(Color, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new BoxViewModel(Color, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new BoxViewModel(Color, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -167,7 +139,7 @@ public partial class BoxViewModel : ViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (BoxViewModel)obj;
-		return Color == o.Color && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Color == o.Color && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -211,7 +183,7 @@ public partial class ButtonModel : ViewModel
 	public Xamarin.Forms.FontAttributes FontAttributes { get; }
 	public double BorderWidth { get; }
 	public Xamarin.Forms.Color BorderColor { get; }
-	public ButtonModel(string text = null, System.Windows.Input.ICommand command = null, System.Object commandParameter = null, Xamarin.Forms.Button.ButtonContentLayout contentLayout = default(Xamarin.Forms.Button.ButtonContentLayout), double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, double borderWidth = -1, Xamarin.Forms.Color borderColor = default(Xamarin.Forms.Color), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public ButtonModel(string text = null, System.Windows.Input.ICommand command = null, System.Object commandParameter = null, Xamarin.Forms.Button.ButtonContentLayout contentLayout = default(Xamarin.Forms.Button.ButtonContentLayout), double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, double borderWidth = -1, Xamarin.Forms.Color borderColor = default(Xamarin.Forms.Color), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(horizontalOptions, verticalOptions, margin) {
 		Text = text;
 		Command = command;
@@ -232,8 +204,8 @@ public partial class ButtonModel : ViewModel
 	public virtual ButtonModel WithFontAttributes(Xamarin.Forms.FontAttributes fontAttributes) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, fontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual ButtonModel WithBorderWidth(double borderWidth) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, borderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual ButtonModel WithBorderColor(Xamarin.Forms.Color borderColor) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, borderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -244,7 +216,7 @@ public partial class ButtonModel : ViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (ButtonModel)obj;
-		return Text == o.Text && Command == o.Command && CommandParameter == o.CommandParameter && ContentLayout == o.ContentLayout && FontSize == o.FontSize && FontFamily == o.FontFamily && FontAttributes == o.FontAttributes && BorderWidth == o.BorderWidth && BorderColor == o.BorderColor && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Text == o.Text && Command == o.Command && CommandParameter == o.CommandParameter && ContentLayout == o.ContentLayout && FontSize == o.FontSize && FontFamily == o.FontFamily && FontAttributes == o.FontAttributes && BorderWidth == o.BorderWidth && BorderColor == o.BorderColor && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -296,15 +268,15 @@ public partial class ButtonModel : ViewModel
 public partial class ContentViewModel : LayoutModel
 {
 	public ViewModel Content { get; }
-	public ContentViewModel(ViewModel content = null, bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public ContentViewModel(ViewModel content = null, bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(isClippedToBounds, padding) {
 		Content = content;
 	}
 	public virtual ContentViewModel WithContent(ViewModel content) => new ContentViewModel(content, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override LayoutModel WithIsClippedToBounds(bool isClippedToBounds) => new ContentViewModel(Content, isClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override LayoutModel WithPadding(Xamarin.Forms.Thickness padding) => new ContentViewModel(Content, IsClippedToBounds, padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ContentViewModel(Content, IsClippedToBounds, Padding, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ContentViewModel(Content, IsClippedToBounds, Padding, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new ContentViewModel(Content, IsClippedToBounds, Padding, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new ContentViewModel(Content, IsClippedToBounds, Padding, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new ContentViewModel(Content, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ContentViewModel(Content, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new ContentViewModel(Content, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -315,7 +287,7 @@ public partial class ContentViewModel : LayoutModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (ContentViewModel)obj;
-		return Content == o.Content && IsClippedToBounds == o.IsClippedToBounds && Padding == o.Padding && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Content == o.Content && IsClippedToBounds == o.IsClippedToBounds && Padding == o.Padding && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -362,7 +334,7 @@ public partial class DatePickerModel : ViewModel
 	public string Format { get; }
 	public System.DateTime MinimumDate { get; }
 	public System.DateTime MaximumDate { get; }
-	public DatePickerModel(System.DateTime date = default(System.DateTime), string format = "d", System.DateTime minimumDate = default(System.DateTime), System.DateTime maximumDate = default(System.DateTime), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public DatePickerModel(System.DateTime date = default(System.DateTime), string format = "d", System.DateTime minimumDate = default(System.DateTime), System.DateTime maximumDate = default(System.DateTime), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(horizontalOptions, verticalOptions, margin) {
 		Date = date;
 		Format = format;
@@ -373,8 +345,8 @@ public partial class DatePickerModel : ViewModel
 	public virtual DatePickerModel WithFormat(string format) => new DatePickerModel(Date, format, MinimumDate, MaximumDate, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual DatePickerModel WithMinimumDate(System.DateTime minimumDate) => new DatePickerModel(Date, Format, minimumDate, MaximumDate, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual DatePickerModel WithMaximumDate(System.DateTime maximumDate) => new DatePickerModel(Date, Format, MinimumDate, maximumDate, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new DatePickerModel(Date, Format, MinimumDate, MaximumDate, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new DatePickerModel(Date, Format, MinimumDate, MaximumDate, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new DatePickerModel(Date, Format, MinimumDate, MaximumDate, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new DatePickerModel(Date, Format, MinimumDate, MaximumDate, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new DatePickerModel(Date, Format, MinimumDate, MaximumDate, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new DatePickerModel(Date, Format, MinimumDate, MaximumDate, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new DatePickerModel(Date, Format, MinimumDate, MaximumDate, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -385,7 +357,7 @@ public partial class DatePickerModel : ViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (DatePickerModel)obj;
-		return Date == o.Date && Format == o.Format && MinimumDate == o.MinimumDate && MaximumDate == o.MaximumDate && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Date == o.Date && Format == o.Format && MinimumDate == o.MinimumDate && MaximumDate == o.MaximumDate && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -429,7 +401,7 @@ public partial class FrameModel : ContentViewModel
 	public Xamarin.Forms.Color OutlineColor { get; }
 	public float CornerRadius { get; }
 	public bool HasShadow { get; }
-	public FrameModel(Xamarin.Forms.Color outlineColor = default(Xamarin.Forms.Color), float cornerRadius = -1, bool hasShadow = true, ViewModel content = null, bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public FrameModel(Xamarin.Forms.Color outlineColor = default(Xamarin.Forms.Color), float cornerRadius = -1, bool hasShadow = true, ViewModel content = null, bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(content) {
 		OutlineColor = outlineColor == default(Xamarin.Forms.Color) ? Xamarin.Forms.Color.Default : outlineColor;
 		CornerRadius = cornerRadius;
@@ -441,8 +413,8 @@ public partial class FrameModel : ContentViewModel
 	public override ContentViewModel WithContent(ViewModel content) => new FrameModel(OutlineColor, CornerRadius, HasShadow, content, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override LayoutModel WithIsClippedToBounds(bool isClippedToBounds) => new FrameModel(OutlineColor, CornerRadius, HasShadow, Content, isClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override LayoutModel WithPadding(Xamarin.Forms.Thickness padding) => new FrameModel(OutlineColor, CornerRadius, HasShadow, Content, IsClippedToBounds, padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new FrameModel(OutlineColor, CornerRadius, HasShadow, Content, IsClippedToBounds, Padding, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new FrameModel(OutlineColor, CornerRadius, HasShadow, Content, IsClippedToBounds, Padding, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new FrameModel(OutlineColor, CornerRadius, HasShadow, Content, IsClippedToBounds, Padding, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new FrameModel(OutlineColor, CornerRadius, HasShadow, Content, IsClippedToBounds, Padding, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new FrameModel(OutlineColor, CornerRadius, HasShadow, Content, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new FrameModel(OutlineColor, CornerRadius, HasShadow, Content, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new FrameModel(OutlineColor, CornerRadius, HasShadow, Content, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -453,7 +425,7 @@ public partial class FrameModel : ContentViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (FrameModel)obj;
-		return OutlineColor == o.OutlineColor && CornerRadius == o.CornerRadius && HasShadow == o.HasShadow && Content == o.Content && IsClippedToBounds == o.IsClippedToBounds && Padding == o.Padding && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return OutlineColor == o.OutlineColor && CornerRadius == o.CornerRadius && HasShadow == o.HasShadow && Content == o.Content && IsClippedToBounds == o.IsClippedToBounds && Padding == o.Padding && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -505,7 +477,7 @@ public partial class ImageModel : ViewModel
 	public Xamarin.Forms.ImageSource Source { get; }
 	public Xamarin.Forms.Aspect Aspect { get; }
 	public bool IsOpaque { get; }
-	public ImageModel(Xamarin.Forms.ImageSource source = null, Xamarin.Forms.Aspect aspect = Xamarin.Forms.Aspect.AspectFit, bool isOpaque = true, LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public ImageModel(Xamarin.Forms.ImageSource source = null, Xamarin.Forms.Aspect aspect = Xamarin.Forms.Aspect.AspectFit, bool isOpaque = true, Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(horizontalOptions, verticalOptions, margin) {
 		Source = source;
 		Aspect = aspect;
@@ -514,8 +486,8 @@ public partial class ImageModel : ViewModel
 	public virtual ImageModel WithSource(Xamarin.Forms.ImageSource source) => new ImageModel(source, Aspect, IsOpaque, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual ImageModel WithAspect(Xamarin.Forms.Aspect aspect) => new ImageModel(Source, aspect, IsOpaque, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual ImageModel WithIsOpaque(bool isOpaque) => new ImageModel(Source, Aspect, isOpaque, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ImageModel(Source, Aspect, IsOpaque, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ImageModel(Source, Aspect, IsOpaque, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new ImageModel(Source, Aspect, IsOpaque, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new ImageModel(Source, Aspect, IsOpaque, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new ImageModel(Source, Aspect, IsOpaque, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ImageModel(Source, Aspect, IsOpaque, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new ImageModel(Source, Aspect, IsOpaque, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -526,7 +498,7 @@ public partial class ImageModel : ViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (ImageModel)obj;
-		return Source == o.Source && Aspect == o.Aspect && IsOpaque == o.IsOpaque && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Source == o.Source && Aspect == o.Aspect && IsOpaque == o.IsOpaque && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -566,13 +538,13 @@ public partial class ImageModel : ViewModel
 public partial class InputViewModel : ViewModel
 {
 	public Xamarin.Forms.Keyboard Keyboard { get; }
-	public InputViewModel(Xamarin.Forms.Keyboard keyboard = default(Xamarin.Forms.Keyboard), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public InputViewModel(Xamarin.Forms.Keyboard keyboard = default(Xamarin.Forms.Keyboard), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(horizontalOptions, verticalOptions, margin) {
 		Keyboard = keyboard == default(Xamarin.Forms.Keyboard) ? Xamarin.Forms.Keyboard.Default : keyboard;
 	}
 	public virtual InputViewModel WithKeyboard(Xamarin.Forms.Keyboard keyboard) => new InputViewModel(keyboard, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new InputViewModel(Keyboard, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new InputViewModel(Keyboard, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new InputViewModel(Keyboard, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new InputViewModel(Keyboard, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new InputViewModel(Keyboard, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new InputViewModel(Keyboard, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new InputViewModel(Keyboard, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -583,7 +555,7 @@ public partial class InputViewModel : ViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (InputViewModel)obj;
-		return Keyboard == o.Keyboard && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Keyboard == o.Keyboard && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -616,7 +588,7 @@ public partial class EditorModel : InputViewModel
 	public string FontFamily { get; }
 	public Xamarin.Forms.FontAttributes FontAttributes { get; }
 	public Xamarin.Forms.Color TextColor { get; }
-	public EditorModel(string text = null, double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), Xamarin.Forms.Keyboard keyboard = default(Xamarin.Forms.Keyboard), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public EditorModel(string text = null, double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), Xamarin.Forms.Keyboard keyboard = default(Xamarin.Forms.Keyboard), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(keyboard) {
 		Text = text;
 		FontSize = fontSize;
@@ -630,8 +602,8 @@ public partial class EditorModel : InputViewModel
 	public virtual EditorModel WithFontAttributes(Xamarin.Forms.FontAttributes fontAttributes) => new EditorModel(Text, FontSize, FontFamily, fontAttributes, TextColor, Keyboard, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual EditorModel WithTextColor(Xamarin.Forms.Color textColor) => new EditorModel(Text, FontSize, FontFamily, FontAttributes, textColor, Keyboard, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override InputViewModel WithKeyboard(Xamarin.Forms.Keyboard keyboard) => new EditorModel(Text, FontSize, FontFamily, FontAttributes, TextColor, keyboard, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new EditorModel(Text, FontSize, FontFamily, FontAttributes, TextColor, Keyboard, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new EditorModel(Text, FontSize, FontFamily, FontAttributes, TextColor, Keyboard, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new EditorModel(Text, FontSize, FontFamily, FontAttributes, TextColor, Keyboard, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new EditorModel(Text, FontSize, FontFamily, FontAttributes, TextColor, Keyboard, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new EditorModel(Text, FontSize, FontFamily, FontAttributes, TextColor, Keyboard, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new EditorModel(Text, FontSize, FontFamily, FontAttributes, TextColor, Keyboard, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new EditorModel(Text, FontSize, FontFamily, FontAttributes, TextColor, Keyboard, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -642,7 +614,7 @@ public partial class EditorModel : InputViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (EditorModel)obj;
-		return Text == o.Text && FontSize == o.FontSize && FontFamily == o.FontFamily && FontAttributes == o.FontAttributes && TextColor == o.TextColor && Keyboard == o.Keyboard && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Text == o.Text && FontSize == o.FontSize && FontFamily == o.FontFamily && FontAttributes == o.FontAttributes && TextColor == o.TextColor && Keyboard == o.Keyboard && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -699,7 +671,7 @@ public partial class EntryModel : InputViewModel
 	public Xamarin.Forms.Color TextColor { get; }
 	public Xamarin.Forms.Color PlaceholderColor { get; }
 	public bool IsPassword { get; }
-	public EntryModel(string text = null, string placeholder = null, Xamarin.Forms.TextAlignment horizontalTextAlignment = Xamarin.Forms.TextAlignment.Start, double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), Xamarin.Forms.Color placeholderColor = default(Xamarin.Forms.Color), bool isPassword = false, Xamarin.Forms.Keyboard keyboard = default(Xamarin.Forms.Keyboard), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public EntryModel(string text = null, string placeholder = null, Xamarin.Forms.TextAlignment horizontalTextAlignment = Xamarin.Forms.TextAlignment.Start, double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), Xamarin.Forms.Color placeholderColor = default(Xamarin.Forms.Color), bool isPassword = false, Xamarin.Forms.Keyboard keyboard = default(Xamarin.Forms.Keyboard), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(keyboard) {
 		Text = text;
 		Placeholder = placeholder;
@@ -721,8 +693,8 @@ public partial class EntryModel : InputViewModel
 	public virtual EntryModel WithPlaceholderColor(Xamarin.Forms.Color placeholderColor) => new EntryModel(Text, Placeholder, HorizontalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, placeholderColor, IsPassword, Keyboard, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual EntryModel WithIsPassword(bool isPassword) => new EntryModel(Text, Placeholder, HorizontalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, PlaceholderColor, isPassword, Keyboard, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override InputViewModel WithKeyboard(Xamarin.Forms.Keyboard keyboard) => new EntryModel(Text, Placeholder, HorizontalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, PlaceholderColor, IsPassword, keyboard, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new EntryModel(Text, Placeholder, HorizontalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, PlaceholderColor, IsPassword, Keyboard, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new EntryModel(Text, Placeholder, HorizontalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, PlaceholderColor, IsPassword, Keyboard, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new EntryModel(Text, Placeholder, HorizontalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, PlaceholderColor, IsPassword, Keyboard, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new EntryModel(Text, Placeholder, HorizontalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, PlaceholderColor, IsPassword, Keyboard, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new EntryModel(Text, Placeholder, HorizontalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, PlaceholderColor, IsPassword, Keyboard, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new EntryModel(Text, Placeholder, HorizontalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, PlaceholderColor, IsPassword, Keyboard, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new EntryModel(Text, Placeholder, HorizontalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, PlaceholderColor, IsPassword, Keyboard, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -733,7 +705,7 @@ public partial class EntryModel : InputViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (EntryModel)obj;
-		return Text == o.Text && Placeholder == o.Placeholder && HorizontalTextAlignment == o.HorizontalTextAlignment && FontSize == o.FontSize && FontFamily == o.FontFamily && FontAttributes == o.FontAttributes && TextColor == o.TextColor && PlaceholderColor == o.PlaceholderColor && IsPassword == o.IsPassword && Keyboard == o.Keyboard && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Text == o.Text && Placeholder == o.Placeholder && HorizontalTextAlignment == o.HorizontalTextAlignment && FontSize == o.FontSize && FontFamily == o.FontFamily && FontAttributes == o.FontAttributes && TextColor == o.TextColor && PlaceholderColor == o.PlaceholderColor && IsPassword == o.IsPassword && Keyboard == o.Keyboard && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -796,7 +768,7 @@ public partial class LabelModel : ViewModel
 	public string FontFamily { get; }
 	public Xamarin.Forms.FontAttributes FontAttributes { get; }
 	public Xamarin.Forms.Color TextColor { get; }
-	public LabelModel(string text = null, Xamarin.Forms.TextAlignment horizontalTextAlignment = Xamarin.Forms.TextAlignment.Start, Xamarin.Forms.TextAlignment verticalTextAlignment = Xamarin.Forms.TextAlignment.Start, double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public LabelModel(string text = null, Xamarin.Forms.TextAlignment horizontalTextAlignment = Xamarin.Forms.TextAlignment.Start, Xamarin.Forms.TextAlignment verticalTextAlignment = Xamarin.Forms.TextAlignment.Start, double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(horizontalOptions, verticalOptions, margin) {
 		Text = text;
 		HorizontalTextAlignment = horizontalTextAlignment;
@@ -813,8 +785,8 @@ public partial class LabelModel : ViewModel
 	public virtual LabelModel WithFontFamily(string fontFamily) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, fontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual LabelModel WithFontAttributes(Xamarin.Forms.FontAttributes fontAttributes) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, fontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual LabelModel WithTextColor(Xamarin.Forms.Color textColor) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, textColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -825,7 +797,7 @@ public partial class LabelModel : ViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (LabelModel)obj;
-		return Text == o.Text && HorizontalTextAlignment == o.HorizontalTextAlignment && VerticalTextAlignment == o.VerticalTextAlignment && FontSize == o.FontSize && FontFamily == o.FontFamily && FontAttributes == o.FontAttributes && TextColor == o.TextColor && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Text == o.Text && HorizontalTextAlignment == o.HorizontalTextAlignment && VerticalTextAlignment == o.VerticalTextAlignment && FontSize == o.FontSize && FontFamily == o.FontFamily && FontAttributes == o.FontAttributes && TextColor == o.TextColor && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -874,15 +846,15 @@ public partial class LayoutModel : ViewModel
 {
 	public bool IsClippedToBounds { get; }
 	public Xamarin.Forms.Thickness Padding { get; }
-	public LayoutModel(bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public LayoutModel(bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(horizontalOptions, verticalOptions, margin) {
 		IsClippedToBounds = isClippedToBounds;
 		Padding = padding;
 	}
 	public virtual LayoutModel WithIsClippedToBounds(bool isClippedToBounds) => new LayoutModel(isClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual LayoutModel WithPadding(Xamarin.Forms.Thickness padding) => new LayoutModel(IsClippedToBounds, padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new LayoutModel(IsClippedToBounds, Padding, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new LayoutModel(IsClippedToBounds, Padding, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new LayoutModel(IsClippedToBounds, Padding, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new LayoutModel(IsClippedToBounds, Padding, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new LayoutModel(IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new LayoutModel(IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new LayoutModel(IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -893,7 +865,7 @@ public partial class LayoutModel : ViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (LayoutModel)obj;
-		return IsClippedToBounds == o.IsClippedToBounds && Padding == o.Padding && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return IsClippedToBounds == o.IsClippedToBounds && Padding == o.Padding && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -926,7 +898,7 @@ public partial class StackLayoutModel : LayoutModel
 	public System.Collections.Generic.IList<ViewModel> Children { get; }
 	public Xamarin.Forms.StackOrientation Orientation { get; }
 	public double Spacing { get; }
-	public StackLayoutModel(System.Collections.Generic.IList<ViewModel> children = null, Xamarin.Forms.StackOrientation orientation = Xamarin.Forms.StackOrientation.Vertical, double spacing = 6, bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public StackLayoutModel(System.Collections.Generic.IList<ViewModel> children = null, Xamarin.Forms.StackOrientation orientation = Xamarin.Forms.StackOrientation.Vertical, double spacing = 6, bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(isClippedToBounds, padding) {
 		Children = children;
 		Orientation = orientation;
@@ -937,8 +909,8 @@ public partial class StackLayoutModel : LayoutModel
 	public virtual StackLayoutModel WithSpacing(double spacing) => new StackLayoutModel(Children, Orientation, spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override LayoutModel WithIsClippedToBounds(bool isClippedToBounds) => new StackLayoutModel(Children, Orientation, Spacing, isClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override LayoutModel WithPadding(Xamarin.Forms.Thickness padding) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -949,7 +921,7 @@ public partial class StackLayoutModel : LayoutModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (StackLayoutModel)obj;
-		return Children == o.Children && Orientation == o.Orientation && Spacing == o.Spacing && IsClippedToBounds == o.IsClippedToBounds && Padding == o.Padding && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Children == o.Children && Orientation == o.Orientation && Spacing == o.Spacing && IsClippedToBounds == o.IsClippedToBounds && Padding == o.Padding && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -1002,7 +974,7 @@ public partial class TimePickerModel : ViewModel
 	public System.TimeSpan Time { get; }
 	public string Format { get; }
 	public Xamarin.Forms.Color TextColor { get; }
-	public TimePickerModel(System.TimeSpan time = default(System.TimeSpan), string format = "t", Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public TimePickerModel(System.TimeSpan time = default(System.TimeSpan), string format = "t", Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(horizontalOptions, verticalOptions, margin) {
 		Time = time == default(System.TimeSpan) ? new System.TimeSpan(0) : time;
 		Format = format;
@@ -1011,8 +983,8 @@ public partial class TimePickerModel : ViewModel
 	public virtual TimePickerModel WithTime(System.TimeSpan time) => new TimePickerModel(time, Format, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual TimePickerModel WithFormat(string format) => new TimePickerModel(Time, format, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual TimePickerModel WithTextColor(Xamarin.Forms.Color textColor) => new TimePickerModel(Time, Format, textColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new TimePickerModel(Time, Format, TextColor, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new TimePickerModel(Time, Format, TextColor, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new TimePickerModel(Time, Format, TextColor, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new TimePickerModel(Time, Format, TextColor, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new TimePickerModel(Time, Format, TextColor, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new TimePickerModel(Time, Format, TextColor, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new TimePickerModel(Time, Format, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -1023,7 +995,7 @@ public partial class TimePickerModel : ViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (TimePickerModel)obj;
-		return Time == o.Time && Format == o.Format && TextColor == o.TextColor && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Time == o.Time && Format == o.Format && TextColor == o.TextColor && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -1063,13 +1035,13 @@ public partial class TimePickerModel : ViewModel
 public partial class WebViewModel : ViewModel
 {
 	public Xamarin.Forms.WebViewSource Source { get; }
-	public WebViewModel(Xamarin.Forms.WebViewSource source = null, LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public WebViewModel(Xamarin.Forms.WebViewSource source = null, Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(horizontalOptions, verticalOptions, margin) {
 		Source = source;
 	}
 	public virtual WebViewModel WithSource(Xamarin.Forms.WebViewSource source) => new WebViewModel(source, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new WebViewModel(Source, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new WebViewModel(Source, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new WebViewModel(Source, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new WebViewModel(Source, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new WebViewModel(Source, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new WebViewModel(Source, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new WebViewModel(Source, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -1080,7 +1052,7 @@ public partial class WebViewModel : ViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (WebViewModel)obj;
-		return Source == o.Source && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Source == o.Source && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -1618,7 +1590,7 @@ public partial class ListViewModel : ViewModel
 	public Xamarin.Forms.Color SeparatorColor { get; }
 	public bool HasUnevenRows { get; }
 	public int RowHeight { get; }
-	public ListViewModel(System.Collections.IEnumerable itemsSource = null, Xamarin.Forms.DataTemplate itemTemplate = null, System.Object selectedItem = null, Xamarin.Forms.SeparatorVisibility separatorVisibility = Xamarin.Forms.SeparatorVisibility.Default, Xamarin.Forms.Color separatorColor = default(Xamarin.Forms.Color), bool hasUnevenRows = false, int rowHeight = -1, LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public ListViewModel(System.Collections.IEnumerable itemsSource = null, Xamarin.Forms.DataTemplate itemTemplate = null, System.Object selectedItem = null, Xamarin.Forms.SeparatorVisibility separatorVisibility = Xamarin.Forms.SeparatorVisibility.Default, Xamarin.Forms.Color separatorColor = default(Xamarin.Forms.Color), bool hasUnevenRows = false, int rowHeight = -1, Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(horizontalOptions, verticalOptions, margin) {
 		ItemsSource = itemsSource;
 		ItemTemplate = itemTemplate;
@@ -1635,8 +1607,8 @@ public partial class ListViewModel : ViewModel
 	public virtual ListViewModel WithSeparatorColor(Xamarin.Forms.Color separatorColor) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, separatorColor, HasUnevenRows, RowHeight, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual ListViewModel WithHasUnevenRows(bool hasUnevenRows) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, SeparatorColor, hasUnevenRows, RowHeight, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public virtual ListViewModel WithRowHeight(int rowHeight) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, SeparatorColor, HasUnevenRows, rowHeight, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, SeparatorColor, HasUnevenRows, RowHeight, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, SeparatorColor, HasUnevenRows, RowHeight, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(Xamarin.Forms.LayoutOptions horizontalOptions) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, SeparatorColor, HasUnevenRows, RowHeight, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(Xamarin.Forms.LayoutOptions verticalOptions) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, SeparatorColor, HasUnevenRows, RowHeight, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, SeparatorColor, HasUnevenRows, RowHeight, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, SeparatorColor, HasUnevenRows, RowHeight, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithIsVisible(bool isVisible) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, SeparatorColor, HasUnevenRows, RowHeight, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -1647,7 +1619,7 @@ public partial class ListViewModel : ViewModel
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (ListViewModel)obj;
-		return ItemsSource == o.ItemsSource && ItemTemplate == o.ItemTemplate && SelectedItem == o.SelectedItem && SeparatorVisibility == o.SeparatorVisibility && SeparatorColor == o.SeparatorColor && HasUnevenRows == o.HasUnevenRows && RowHeight == o.RowHeight && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return ItemsSource == o.ItemsSource && ItemTemplate == o.ItemTemplate && SelectedItem == o.SelectedItem && SeparatorVisibility == o.SeparatorVisibility && SeparatorColor == o.SeparatorColor && HasUnevenRows == o.HasUnevenRows && RowHeight == o.RowHeight && (HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands) && (VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands) && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();

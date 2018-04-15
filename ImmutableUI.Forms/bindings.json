@@ -20,17 +20,12 @@
             ]
         },
         {
-            "name": "Xamarin.Forms.LayoutOptions",
-            "members": [
-                { "name": "Alignment", "default": "Xamarin.Forms.LayoutAlignment.Fill" },
-                { "name": "Expands", "default": "false" }
-            ]
-        },
-        {
             "name": "Xamarin.Forms.View",
             "members": [
-                { "name": "HorizontalOptions", "default": "null" },
-                { "name": "VerticalOptions", "default": "null" },
+                { "name": "HorizontalOptions", "default": "default(Xamarin.Forms.LayoutOptions)",
+                  "equality": "(HorizontalOptions.Alignment == o.HorizontalOptions.Alignment && HorizontalOptions.Expands == o.HorizontalOptions.Expands)" },
+                { "name": "VerticalOptions", "default": "default(Xamarin.Forms.LayoutOptions)",
+                  "equality": "(VerticalOptions.Alignment == o.VerticalOptions.Alignment && VerticalOptions.Expands == o.VerticalOptions.Expands)" },
                 { "name": "Margin", "default": "default(Xamarin.Forms.Thickness)" }
             ]
         },
@@ -153,7 +148,7 @@
         {
             "name": "Xamarin.Forms.WebView",
             "members": [
-                { "name": "Source", "default": "null" },
+                { "name": "Source", "default": "null" }
             ]
         },
         {

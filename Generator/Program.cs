@@ -47,6 +47,7 @@ namespace Generator
         public string Default { get; set; }
         public string ConstDefault { get; set; }
         public string Apply { get; set; }
+        public string Equality { get; set; }
 
         // Output
         public MemberReference Definition { get; set; }
@@ -222,7 +223,10 @@ namespace Generator
                 if (allmembers.Count > 0) {
                     head = "";
                     foreach (var m in allmembers) {
-                        w.Write ($"{head}{m.Name} == o.{m.Name}");
+                        if (!string.IsNullOrEmpty (m.Equality))
+                            w.Write ($"{head}{m.Equality}");
+                        else
+                            w.Write ($"{head}{m.Name} == o.{m.Name}");
                         head = " && ";
                     }
                     w.WriteLine (";");
