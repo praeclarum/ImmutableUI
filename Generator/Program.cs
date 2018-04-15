@@ -13,6 +13,7 @@ namespace Generator
         // Input
         public List<string> Assemblies { get; set; }
         public List<TypeBinding> Types { get; set; }
+        public string OutputNamespace { get; set; }
 
         // Output
         public List<AssemblyDefinition> AssemblyDefinitions { get; set; }
@@ -92,7 +93,10 @@ namespace Generator
                 foreach (var x in bindings.Types)
                     BindType (x, bindings);
 
-                var code = String.Join ("\n", bindings.Types.Select(x => x.BoundCode));
+                var code =
+                    "namespace " + bindings.OutputNamespace + " {\n" +
+                    String.Join ("\n", bindings.Types.Select(x => x.BoundCode)) +
+                    "}\n";
 
                 File.WriteAllText (outputPath, code);
                 return 0;

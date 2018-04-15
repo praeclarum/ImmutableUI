@@ -2,6 +2,7 @@
     "assemblies": [
         "packages/xamarin.forms/2.5.1.444934/lib/netstandard1.0/Xamarin.Forms.Core.dll"
     ],
+    "outputNamespace": "InterpretedUI.Forms",
     "types": [
         {
             "name": "Xamarin.Forms.Element",

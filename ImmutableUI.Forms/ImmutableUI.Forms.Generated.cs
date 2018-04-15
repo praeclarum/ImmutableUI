@@ -1,3 +1,4 @@
+namespace InterpretedUI.Forms {
 public partial class ElementModel
 {
 	public ElementModel() {
@@ -1662,4 +1663,5 @@ public partial class ListViewModel : ViewModel
 		if (target is Xamarin.Forms.ListView t) Apply(t);
 		else base.Apply(target);
 	}
+}
 }
