@@ -3,7 +3,7 @@
 Immutable UI is a collection of
 immutable data objects that mirror object-oriented user interface APIs. It's like a "shadow DOM" for .NET apps.
 
-So far, only Xamarin.Forms has been bound but I hope to also
+So far, only Xamarin.Forms has been bound, but I hope to also
 cover UIKit. And I still haven't bound events... wip :-)
 
 
@@ -52,7 +52,7 @@ public class MainPage : ContentPage
 There is an immutable model class provided for
 every UI class in Xamarin.Forms.
 
-To keep ourselves sain, each of these objects is suffixed with **Model**
+To keep ourselves sane, each of these objects is suffixed with **Model**
 and is contained in the namespace **ImmutableUI.Forms**.
 (If the names weren't suffixed then terribly annoying name collisions
 would happen with the OOP API.)
@@ -61,7 +61,7 @@ For example, `Xamarin.Forms.Button` has an immutable counterpart named `Immutabl
 
 ### Thread Safety
 
-UI Model objects can be used on multiple threads simulataneously since there's no risk of corrupting state. This means they can be shared
+UI Model objects can be used on multiple threads simultaneously since there's no risk of corrupting state. This means they can be shared
 between the UI thread and background workers without the need for
 synchronization.
 
@@ -110,7 +110,7 @@ Every object is light-weight and can be serialized and deserialized
 using your favorite library.
 
 This means your UI can now be serialized. This opens up many opportunities
-for quick state restoration, in-app gui design, etc.
+for quick state restoration, in-app GUI design, etc.
 
 ### Works with the Mutable Objects
 
