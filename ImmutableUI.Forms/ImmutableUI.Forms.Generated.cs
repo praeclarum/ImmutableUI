@@ -2,8 +2,9 @@ public partial class ElementModel
 {
 	public ElementModel() {
 	}
-	public override bool Equals(object other) {
-		if (!(other is ElementModel o)) return false;
+	public override bool Equals(object obj) {
+		if (obj == null || GetType() != obj.GetType()) return false;
+		var o = (ElementModel)obj;
 		return true;
 	}
 	public override int GetHashCode() {
@@ -38,9 +39,9 @@ public partial class VisualElementModel : ElementModel
 	public virtual VisualElementModel WithWidthRequest(double widthRequest) => new VisualElementModel(BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
 	public virtual VisualElementModel WithHeightRequest(double heightRequest) => new VisualElementModel(BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
 	public virtual VisualElementModel WithIsEnabled(bool isEnabled) => new VisualElementModel(BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
-	public override bool Equals(object other) {
-		if (!(other is VisualElementModel o)) return false;
-		if (!base.Equals(other)) return false;
+	public override bool Equals(object obj) {
+		if (obj == null || GetType() != obj.GetType()) return false;
+		var o = (VisualElementModel)obj;
 		return BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
@@ -79,8 +80,9 @@ public partial class LayoutOptionsModel
 	}
 	public virtual LayoutOptionsModel WithAlignment(Xamarin.Forms.LayoutAlignment alignment) => new LayoutOptionsModel(alignment, Expands);
 	public virtual LayoutOptionsModel WithExpands(bool expands) => new LayoutOptionsModel(Alignment, expands);
-	public override bool Equals(object other) {
-		if (!(other is LayoutOptionsModel o)) return false;
+	public override bool Equals(object obj) {
+		if (obj == null || GetType() != obj.GetType()) return false;
+		var o = (LayoutOptionsModel)obj;
 		return Alignment == o.Alignment && Expands == o.Expands;
 	}
 	public override int GetHashCode() {
@@ -116,10 +118,10 @@ public partial class ViewModel : VisualElementModel
 	public override VisualElementModel WithWidthRequest(double widthRequest) => new ViewModel(HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithHeightRequest(double heightRequest) => new ViewModel(HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
 	public override VisualElementModel WithIsEnabled(bool isEnabled) => new ViewModel(HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
-	public override bool Equals(object other) {
-		if (!(other is ViewModel o)) return false;
-		if (!base.Equals(other)) return false;
-		return HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin;
+	public override bool Equals(object obj) {
+		if (obj == null || GetType() != obj.GetType()) return false;
+		var o = (ViewModel)obj;
+		return HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -162,10 +164,10 @@ public partial class ButtonModel : ViewModel
 	public override VisualElementModel WithWidthRequest(double widthRequest) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithHeightRequest(double heightRequest) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
 	public override VisualElementModel WithIsEnabled(bool isEnabled) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
-	public override bool Equals(object other) {
-		if (!(other is ButtonModel o)) return false;
-		if (!base.Equals(other)) return false;
-		return Text == o.Text;
+	public override bool Equals(object obj) {
+		if (obj == null || GetType() != obj.GetType()) return false;
+		var o = (ButtonModel)obj;
+		return Text == o.Text && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -215,10 +217,10 @@ public partial class ContentViewModel : ViewModel
 	public override VisualElementModel WithWidthRequest(double widthRequest) => new ContentViewModel(Content, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithHeightRequest(double heightRequest) => new ContentViewModel(Content, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
 	public override VisualElementModel WithIsEnabled(bool isEnabled) => new ContentViewModel(Content, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
-	public override bool Equals(object other) {
-		if (!(other is ContentViewModel o)) return false;
-		if (!base.Equals(other)) return false;
-		return Content == o.Content;
+	public override bool Equals(object obj) {
+		if (obj == null || GetType() != obj.GetType()) return false;
+		var o = (ContentViewModel)obj;
+		return Content == o.Content && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -269,10 +271,10 @@ public partial class PageModel : VisualElementModel
 	public override VisualElementModel WithWidthRequest(double widthRequest) => new PageModel(Title, Padding, BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithHeightRequest(double heightRequest) => new PageModel(Title, Padding, BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
 	public override VisualElementModel WithIsEnabled(bool isEnabled) => new PageModel(Title, Padding, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
-	public override bool Equals(object other) {
-		if (!(other is PageModel o)) return false;
-		if (!base.Equals(other)) return false;
-		return Title == o.Title && Padding == o.Padding;
+	public override bool Equals(object obj) {
+		if (obj == null || GetType() != obj.GetType()) return false;
+		var o = (PageModel)obj;
+		return Title == o.Title && Padding == o.Padding && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -318,10 +320,10 @@ public partial class ContentPageModel : PageModel
 	public override VisualElementModel WithWidthRequest(double widthRequest) => new ContentPageModel(Content, Title, Padding, BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithHeightRequest(double heightRequest) => new ContentPageModel(Content, Title, Padding, BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
 	public override VisualElementModel WithIsEnabled(bool isEnabled) => new ContentPageModel(Content, Title, Padding, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
-	public override bool Equals(object other) {
-		if (!(other is ContentPageModel o)) return false;
-		if (!base.Equals(other)) return false;
-		return Content == o.Content;
+	public override bool Equals(object obj) {
+		if (obj == null || GetType() != obj.GetType()) return false;
+		var o = (ContentPageModel)obj;
+		return Content == o.Content && Title == o.Title && Padding == o.Padding && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -366,9 +368,9 @@ public partial class CellModel : ElementModel
 	}
 	public virtual CellModel WithHeight(double height) => new CellModel(height, IsEnabled);
 	public virtual CellModel WithIsEnabled(bool isEnabled) => new CellModel(Height, isEnabled);
-	public override bool Equals(object other) {
-		if (!(other is CellModel o)) return false;
-		if (!base.Equals(other)) return false;
+	public override bool Equals(object obj) {
+		if (obj == null || GetType() != obj.GetType()) return false;
+		var o = (CellModel)obj;
 		return Height == o.Height && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
@@ -399,10 +401,10 @@ public partial class ViewCellModel : CellModel
 	public virtual ViewCellModel WithView(ViewModel view) => new ViewCellModel(view, Height, IsEnabled);
 	public override CellModel WithHeight(double height) => new ViewCellModel(View, height, IsEnabled);
 	public override CellModel WithIsEnabled(bool isEnabled) => new ViewCellModel(View, Height, isEnabled);
-	public override bool Equals(object other) {
-		if (!(other is ViewCellModel o)) return false;
-		if (!base.Equals(other)) return false;
-		return View == o.View;
+	public override bool Equals(object obj) {
+		if (obj == null || GetType() != obj.GetType()) return false;
+		var o = (ViewCellModel)obj;
+		return View == o.View && Height == o.Height && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
@@ -466,10 +468,10 @@ public partial class ListViewModel : ViewModel
 	public override VisualElementModel WithWidthRequest(double widthRequest) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, SeparatorColor, HasUnevenRows, RowHeight, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
 	public override VisualElementModel WithHeightRequest(double heightRequest) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, SeparatorColor, HasUnevenRows, RowHeight, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
 	public override VisualElementModel WithIsEnabled(bool isEnabled) => new ListViewModel(ItemsSource, ItemTemplate, SelectedItem, SeparatorVisibility, SeparatorColor, HasUnevenRows, RowHeight, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
-	public override bool Equals(object other) {
-		if (!(other is ListViewModel o)) return false;
-		if (!base.Equals(other)) return false;
-		return ItemsSource == o.ItemsSource && ItemTemplate == o.ItemTemplate && SelectedItem == o.SelectedItem && SeparatorVisibility == o.SeparatorVisibility && SeparatorColor == o.SeparatorColor && HasUnevenRows == o.HasUnevenRows && RowHeight == o.RowHeight;
+	public override bool Equals(object obj) {
+		if (obj == null || GetType() != obj.GetType()) return false;
+		var o = (ListViewModel)obj;
+		return ItemsSource == o.ItemsSource && ItemTemplate == o.ItemTemplate && SelectedItem == o.SelectedItem && SeparatorVisibility == o.SeparatorVisibility && SeparatorColor == o.SeparatorColor && HasUnevenRows == o.HasUnevenRows && RowHeight == o.RowHeight && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();

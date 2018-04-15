@@ -200,14 +200,13 @@ namespace Generator
                 //
                 // Equality
                 //
-                w.WriteLine("\tpublic override bool Equals(object other) {");
-                w.WriteLine($"\t\tif (!(other is {type.BoundName} o)) return false;");
-                if (baseType != null)
-                    w.WriteLine($"\t\tif (!base.Equals(other)) return false;");
+                w.WriteLine("\tpublic override bool Equals(object obj) {");
+                w.WriteLine($"\t\tif (obj == null || GetType() != obj.GetType()) return false;");
+                w.WriteLine($"\t\tvar o = ({type.BoundName})obj;");
                 w.Write ("\t\treturn ");
                 if (allmembers.Count > 0) {
                     head = "";
-                    foreach (var m in type.Members) {
+                    foreach (var m in allmembers) {
                         w.Write ($"{head}{m.Name} == o.{m.Name}");
                         head = " && ";
                     }
