@@ -108,6 +108,18 @@
             ]
         },
         {
+            "name": "Xamarin.Forms.Label",
+            "members": [
+                { "name": "Text", "default": "null" },
+                { "name": "HorizontalTextAlignment", "default": "Xamarin.Forms.TextAlignment.Start" },
+                { "name": "VerticalTextAlignment", "default": "Xamarin.Forms.TextAlignment.Start" },
+                { "name": "FontSize", "default": "-1" },
+                { "name": "FontFamily", "default": "null" },
+                { "name": "FontAttributes", "default": "Xamarin.Forms.FontAttributes.None" },
+                { "name": "TextColor", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" }
+            ]
+        },
+        {
             "name": "Xamarin.Forms.Layout",
             "members": [
                 { "name": "IsClippedToBounds", "default": "false" },
