@@ -182,9 +182,11 @@ namespace Generator
                     w.WriteLine();
                     w.Write("\t\t: base(");
                     head = "";
-                    foreach (var m in baseType.Members) {
-                        w.Write ($"{head}{m.LowerName}");
-                        head = ", ";
+                    foreach (var b in bh.Skip(1)) {
+                        foreach (var m in b.Members) {
+                            w.Write ($"{head}{m.LowerName}");
+                            head = ", ";
+                        }
                     }
                     w.Write($")");
                 }

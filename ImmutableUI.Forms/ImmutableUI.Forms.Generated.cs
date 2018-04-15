@@ -10,7 +10,7 @@ public partial class ElementModel
 	}
 	public override int GetHashCode() {
 		var hash = 17;
-		return hash;
+            return hash;
 	}
 	public virtual Xamarin.Forms.Element CreateElement() => throw new System.NotSupportedException("Cannot create Xamarin.Forms.Element from " + GetType().FullName);
 	public virtual void Apply(Xamarin.Forms.Element target) {
@@ -124,7 +124,7 @@ public partial class BoxViewModel : ViewModel
 {
 	public Xamarin.Forms.Color Color { get; }
 	public BoxViewModel(Xamarin.Forms.Color color = default(Xamarin.Forms.Color), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(horizontalOptions, verticalOptions, margin) {
+		: base(horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Color = color == default(Xamarin.Forms.Color) ? Xamarin.Forms.Color.Default : color;
 	}
 	public virtual BoxViewModel WithColor(Xamarin.Forms.Color color) => new BoxViewModel(color, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -185,7 +185,7 @@ public partial class ButtonModel : ViewModel
 	public double BorderWidth { get; }
 	public Xamarin.Forms.Color BorderColor { get; }
 	public ButtonModel(string text = null, System.Windows.Input.ICommand command = null, System.Object commandParameter = null, Xamarin.Forms.Button.ButtonContentLayout contentLayout = default(Xamarin.Forms.Button.ButtonContentLayout), double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, double borderWidth = -1, Xamarin.Forms.Color borderColor = default(Xamarin.Forms.Color), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(horizontalOptions, verticalOptions, margin) {
+		: base(horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Text = text;
 		Command = command;
 		CommandParameter = commandParameter;
@@ -270,7 +270,7 @@ public partial class ContentViewModel : LayoutModel
 {
 	public ViewModel Content { get; }
 	public ContentViewModel(ViewModel content = null, bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(isClippedToBounds, padding) {
+		: base(isClippedToBounds, padding, horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Content = content;
 	}
 	public virtual ContentViewModel WithContent(ViewModel content) => new ContentViewModel(content, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -336,7 +336,7 @@ public partial class DatePickerModel : ViewModel
 	public System.DateTime MinimumDate { get; }
 	public System.DateTime MaximumDate { get; }
 	public DatePickerModel(System.DateTime date = default(System.DateTime), string format = "d", System.DateTime minimumDate = default(System.DateTime), System.DateTime maximumDate = default(System.DateTime), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(horizontalOptions, verticalOptions, margin) {
+		: base(horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Date = date;
 		Format = format;
 		MinimumDate = minimumDate == default(System.DateTime) ? new System.DateTime(1900, 1, 1) : minimumDate;
@@ -403,7 +403,7 @@ public partial class FrameModel : ContentViewModel
 	public float CornerRadius { get; }
 	public bool HasShadow { get; }
 	public FrameModel(Xamarin.Forms.Color outlineColor = default(Xamarin.Forms.Color), float cornerRadius = -1, bool hasShadow = true, ViewModel content = null, bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(content) {
+		: base(content, isClippedToBounds, padding, horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		OutlineColor = outlineColor == default(Xamarin.Forms.Color) ? Xamarin.Forms.Color.Default : outlineColor;
 		CornerRadius = cornerRadius;
 		HasShadow = hasShadow;
@@ -479,7 +479,7 @@ public partial class ImageModel : ViewModel
 	public Xamarin.Forms.Aspect Aspect { get; }
 	public bool IsOpaque { get; }
 	public ImageModel(Xamarin.Forms.ImageSource source = null, Xamarin.Forms.Aspect aspect = Xamarin.Forms.Aspect.AspectFit, bool isOpaque = true, Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(horizontalOptions, verticalOptions, margin) {
+		: base(horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Source = source;
 		Aspect = aspect;
 		IsOpaque = isOpaque;
@@ -540,7 +540,7 @@ public partial class InputViewModel : ViewModel
 {
 	public Xamarin.Forms.Keyboard Keyboard { get; }
 	public InputViewModel(Xamarin.Forms.Keyboard keyboard = default(Xamarin.Forms.Keyboard), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(horizontalOptions, verticalOptions, margin) {
+		: base(horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Keyboard = keyboard == default(Xamarin.Forms.Keyboard) ? Xamarin.Forms.Keyboard.Default : keyboard;
 	}
 	public virtual InputViewModel WithKeyboard(Xamarin.Forms.Keyboard keyboard) => new InputViewModel(keyboard, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -590,7 +590,7 @@ public partial class EditorModel : InputViewModel
 	public Xamarin.Forms.FontAttributes FontAttributes { get; }
 	public Xamarin.Forms.Color TextColor { get; }
 	public EditorModel(string text = null, double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), Xamarin.Forms.Keyboard keyboard = default(Xamarin.Forms.Keyboard), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(keyboard) {
+		: base(keyboard, horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Text = text;
 		FontSize = fontSize;
 		FontFamily = fontFamily;
@@ -673,7 +673,7 @@ public partial class EntryModel : InputViewModel
 	public Xamarin.Forms.Color PlaceholderColor { get; }
 	public bool IsPassword { get; }
 	public EntryModel(string text = null, string placeholder = null, Xamarin.Forms.TextAlignment horizontalTextAlignment = Xamarin.Forms.TextAlignment.Start, double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), Xamarin.Forms.Color placeholderColor = default(Xamarin.Forms.Color), bool isPassword = false, Xamarin.Forms.Keyboard keyboard = default(Xamarin.Forms.Keyboard), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(keyboard) {
+		: base(keyboard, horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Text = text;
 		Placeholder = placeholder;
 		HorizontalTextAlignment = horizontalTextAlignment;
@@ -770,7 +770,7 @@ public partial class LabelModel : ViewModel
 	public Xamarin.Forms.FontAttributes FontAttributes { get; }
 	public Xamarin.Forms.Color TextColor { get; }
 	public LabelModel(string text = null, Xamarin.Forms.TextAlignment horizontalTextAlignment = Xamarin.Forms.TextAlignment.Start, Xamarin.Forms.TextAlignment verticalTextAlignment = Xamarin.Forms.TextAlignment.Start, double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(horizontalOptions, verticalOptions, margin) {
+		: base(horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Text = text;
 		HorizontalTextAlignment = horizontalTextAlignment;
 		VerticalTextAlignment = verticalTextAlignment;
@@ -848,7 +848,7 @@ public partial class LayoutModel : ViewModel
 	public bool IsClippedToBounds { get; }
 	public Xamarin.Forms.Thickness Padding { get; }
 	public LayoutModel(bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(horizontalOptions, verticalOptions, margin) {
+		: base(horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		IsClippedToBounds = isClippedToBounds;
 		Padding = padding;
 	}
@@ -900,7 +900,7 @@ public partial class StackLayoutModel : LayoutModel
 	public Xamarin.Forms.StackOrientation Orientation { get; }
 	public double Spacing { get; }
 	public StackLayoutModel(System.Collections.Generic.IList<ViewModel> children = null, Xamarin.Forms.StackOrientation orientation = Xamarin.Forms.StackOrientation.Vertical, double spacing = 6, bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(isClippedToBounds, padding) {
+		: base(isClippedToBounds, padding, horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Children = children;
 		Orientation = orientation;
 		Spacing = spacing;
@@ -976,7 +976,7 @@ public partial class TimePickerModel : ViewModel
 	public string Format { get; }
 	public Xamarin.Forms.Color TextColor { get; }
 	public TimePickerModel(System.TimeSpan time = default(System.TimeSpan), string format = "t", Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(horizontalOptions, verticalOptions, margin) {
+		: base(horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Time = time == default(System.TimeSpan) ? new System.TimeSpan(0) : time;
 		Format = format;
 		TextColor = textColor == default(Xamarin.Forms.Color) ? Xamarin.Forms.Color.Default : textColor;
@@ -1037,7 +1037,7 @@ public partial class WebViewModel : ViewModel
 {
 	public Xamarin.Forms.WebViewSource Source { get; }
 	public WebViewModel(Xamarin.Forms.WebViewSource source = null, Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(horizontalOptions, verticalOptions, margin) {
+		: base(horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Source = source;
 	}
 	public virtual WebViewModel WithSource(Xamarin.Forms.WebViewSource source) => new WebViewModel(source, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -1143,7 +1143,7 @@ public partial class CarouselPageModel : PageModel
 	public System.Object SelectedItem { get; }
 	public ContentPageModel CurrentPage { get; }
 	public CarouselPageModel(System.Collections.IEnumerable itemsSource = null, Xamarin.Forms.DataTemplate itemTemplate = null, System.Object selectedItem = null, ContentPageModel currentPage = null, string title = "", Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(title, padding) {
+		: base(title, padding, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		ItemsSource = itemsSource;
 		ItemTemplate = itemTemplate;
 		SelectedItem = selectedItem;
@@ -1210,7 +1210,7 @@ public partial class ContentPageModel : PageModel
 {
 	public ViewModel Content { get; }
 	public ContentPageModel(ViewModel content = null, string title = "", Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(title, padding) {
+		: base(title, padding, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Content = content;
 	}
 	public virtual ContentPageModel WithContent(ViewModel content) => new ContentPageModel(content, Title, Padding, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
@@ -1266,7 +1266,7 @@ public partial class MasterDetailPageModel : PageModel
 	public PageModel Master { get; }
 	public PageModel Detail { get; }
 	public MasterDetailPageModel(PageModel master = null, PageModel detail = null, string title = "", Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(title, padding) {
+		: base(title, padding, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		Master = master;
 		Detail = detail;
 	}
@@ -1330,7 +1330,7 @@ public partial class TabbedPageModel : PageModel
 	public Xamarin.Forms.DataTemplate ItemTemplate { get; }
 	public System.Object SelectedItem { get; }
 	public TabbedPageModel(System.Collections.IEnumerable itemsSource = null, Xamarin.Forms.DataTemplate itemTemplate = null, System.Object selectedItem = null, string title = "", Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(title, padding) {
+		: base(title, padding, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		ItemsSource = itemsSource;
 		ItemTemplate = itemTemplate;
 		SelectedItem = selectedItem;
@@ -1490,7 +1490,7 @@ public partial class ImageCellModel : TextCellModel
 {
 	public Xamarin.Forms.ImageSource ImageSource { get; }
 	public ImageCellModel(Xamarin.Forms.ImageSource imageSource = null, string text = null, string detail = null, Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), Xamarin.Forms.Color detailColor = default(Xamarin.Forms.Color), System.Windows.Input.ICommand command = null, System.Object commandParameter = null, double height = -1, bool isEnabled = true)
-		: base(text, detail, textColor, detailColor, command, commandParameter) {
+		: base(text, detail, textColor, detailColor, command, commandParameter, height, isEnabled) {
 		ImageSource = imageSource;
 	}
 	public virtual ImageCellModel WithImageSource(Xamarin.Forms.ImageSource imageSource) => new ImageCellModel(imageSource, Text, Detail, TextColor, DetailColor, Command, CommandParameter, Height, IsEnabled);
@@ -1592,7 +1592,7 @@ public partial class ListViewModel : ViewModel
 	public bool HasUnevenRows { get; }
 	public int RowHeight { get; }
 	public ListViewModel(System.Collections.IEnumerable itemsSource = null, Xamarin.Forms.DataTemplate itemTemplate = null, System.Object selectedItem = null, Xamarin.Forms.SeparatorVisibility separatorVisibility = Xamarin.Forms.SeparatorVisibility.Default, Xamarin.Forms.Color separatorColor = default(Xamarin.Forms.Color), bool hasUnevenRows = false, int rowHeight = -1, Xamarin.Forms.LayoutOptions horizontalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.LayoutOptions verticalOptions = default(Xamarin.Forms.LayoutOptions), Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(horizontalOptions, verticalOptions, margin) {
+		: base(horizontalOptions, verticalOptions, margin, backgroundColor, isVisible, opacity, widthRequest, heightRequest, isEnabled) {
 		ItemsSource = itemsSource;
 		ItemTemplate = itemTemplate;
 		SelectedItem = selectedItem;
