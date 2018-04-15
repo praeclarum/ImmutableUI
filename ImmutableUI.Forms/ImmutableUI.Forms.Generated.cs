@@ -747,6 +747,89 @@ public partial class EntryModel : InputViewModel
 	}
 }
 
+public partial class LabelModel : ViewModel
+{
+	public string Text { get; }
+	public Xamarin.Forms.TextAlignment HorizontalTextAlignment { get; }
+	public Xamarin.Forms.TextAlignment VerticalTextAlignment { get; }
+	public double FontSize { get; }
+	public string FontFamily { get; }
+	public Xamarin.Forms.FontAttributes FontAttributes { get; }
+	public Xamarin.Forms.Color TextColor { get; }
+	public LabelModel(string text = null, Xamarin.Forms.TextAlignment horizontalTextAlignment = Xamarin.Forms.TextAlignment.Start, Xamarin.Forms.TextAlignment verticalTextAlignment = Xamarin.Forms.TextAlignment.Start, double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, Xamarin.Forms.Color textColor = default(Xamarin.Forms.Color), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+		: base(horizontalOptions, verticalOptions, margin) {
+		Text = text;
+		HorizontalTextAlignment = horizontalTextAlignment;
+		VerticalTextAlignment = verticalTextAlignment;
+		FontSize = fontSize;
+		FontFamily = fontFamily;
+		FontAttributes = fontAttributes;
+		TextColor = textColor == default(Xamarin.Forms.Color) ? Xamarin.Forms.Color.Default : textColor;
+	}
+	public virtual LabelModel WithText(string text) => new LabelModel(text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual LabelModel WithHorizontalTextAlignment(Xamarin.Forms.TextAlignment horizontalTextAlignment) => new LabelModel(Text, horizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual LabelModel WithVerticalTextAlignment(Xamarin.Forms.TextAlignment verticalTextAlignment) => new LabelModel(Text, HorizontalTextAlignment, verticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual LabelModel WithFontSize(double fontSize) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, fontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual LabelModel WithFontFamily(string fontFamily) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, fontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual LabelModel WithFontAttributes(Xamarin.Forms.FontAttributes fontAttributes) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, fontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual LabelModel WithTextColor(Xamarin.Forms.Color textColor) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, textColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithIsVisible(bool isVisible) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithOpacity(double opacity) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithWidthRequest(double widthRequest) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithHeightRequest(double heightRequest) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
+	public override VisualElementModel WithIsEnabled(bool isEnabled) => new LabelModel(Text, HorizontalTextAlignment, VerticalTextAlignment, FontSize, FontFamily, FontAttributes, TextColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
+	public override bool Equals(object obj) {
+		if (obj == null || GetType() != obj.GetType()) return false;
+		var o = (LabelModel)obj;
+		return Text == o.Text && HorizontalTextAlignment == o.HorizontalTextAlignment && VerticalTextAlignment == o.VerticalTextAlignment && FontSize == o.FontSize && FontFamily == o.FontFamily && FontAttributes == o.FontAttributes && TextColor == o.TextColor && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+	}
+	public override int GetHashCode() {
+		var hash = base.GetHashCode();
+		hash = hash * 37 + (Text != null ? Text.GetHashCode() : 0);
+		hash = hash * 37 + HorizontalTextAlignment.GetHashCode();
+		hash = hash * 37 + VerticalTextAlignment.GetHashCode();
+		hash = hash * 37 + FontSize.GetHashCode();
+		hash = hash * 37 + (FontFamily != null ? FontFamily.GetHashCode() : 0);
+		hash = hash * 37 + FontAttributes.GetHashCode();
+		hash = hash * 37 + TextColor.GetHashCode();
+		return hash;
+	}
+	public virtual Xamarin.Forms.Label CreateLabel() {
+		var target = new Xamarin.Forms.Label();
+		Apply(target);
+		return target;
+	}
+	public override Xamarin.Forms.View CreateView() => CreateLabel();
+	public override Xamarin.Forms.VisualElement CreateVisualElement() => CreateLabel();
+	public override Xamarin.Forms.Element CreateElement() => CreateLabel();
+	public virtual void Apply(Xamarin.Forms.Label target) {
+		base.Apply(target);
+		target.Text = Text;
+		target.HorizontalTextAlignment = HorizontalTextAlignment;
+		target.VerticalTextAlignment = VerticalTextAlignment;
+		target.FontSize = FontSize;
+		target.FontFamily = FontFamily;
+		target.FontAttributes = FontAttributes;
+		target.TextColor = TextColor;
+	}
+	public override void Apply(Xamarin.Forms.View target) {
+		if (target is Xamarin.Forms.Label t) Apply(t);
+		else base.Apply(target);
+	}
+	public override void Apply(Xamarin.Forms.VisualElement target) {
+		if (target is Xamarin.Forms.Label t) Apply(t);
+		else base.Apply(target);
+	}
+	public override void Apply(Xamarin.Forms.Element target) {
+		if (target is Xamarin.Forms.Label t) Apply(t);
+		else base.Apply(target);
+	}
+}
+
 public partial class LayoutModel : ViewModel
 {
 	public bool IsClippedToBounds { get; }
