@@ -198,6 +198,44 @@ namespace Generator
                 }
 
                 //
+                // Equality
+                //
+                w.WriteLine("\tpublic override bool Equals(object other) {");
+                w.WriteLine($"\t\tif (!(other is {type.BoundName} o)) return false;");
+                if (baseType != null)
+                    w.WriteLine($"\t\tif (!base.Equals(other)) return false;");
+                w.Write ("\t\treturn ");
+                if (allmembers.Count > 0) {
+                    head = "";
+                    foreach (var m in type.Members) {
+                        w.Write ($"{head}{m.Name} == o.{m.Name}");
+                        head = " && ";
+                    }
+                    w.WriteLine (";");
+                }
+                else {
+                    w.WriteLine ("true;");
+                }
+                w.WriteLine ("\t}");
+                
+                //
+                // Hash Code
+                //
+                w.WriteLine("\tpublic override int GetHashCode() {");
+                if (baseType != null)
+                    w.WriteLine($"\t\tvar hash = base.GetHashCode();");
+                else
+                    w.WriteLine($"\t\tvar hash = 17;");
+                foreach (var m in type.Members) {
+                    if (m.BoundType.IsValueType)
+                        w.WriteLine ($"\t\thash = hash * 37 + {m.Name}.GetHashCode();");
+                    else
+                        w.WriteLine ($"\t\thash = hash * 37 + ({m.Name} != null ? {m.Name}.GetHashCode() : 0);");
+                }
+                w.WriteLine ("\t\treturn hash;");
+                w.WriteLine ("\t}");
+
+                //
                 // Creates
                 //
                 if (t.IsAbstract || ctor == null || ctor.Parameters.Count != 0) {
@@ -227,7 +265,7 @@ namespace Generator
                             w.WriteLine ($"\t\ttarget.{m.Name} = {m.Name}.Create{m.BoundType.Name}();");
                         }
                         else {
-                            w.WriteLine ($"\t\tif (target.{m.Name} != null) {m.Name}.Apply(target.{m.Name});");
+                            w.WriteLine ($"\t\tif (target.{m.Name} is {m.BoundType.FullName} t) {m.Name}.Apply(t);");
                             w.WriteLine ($"\t\telse target.{m.Name} = {m.Name}.Create{m.BoundType.Name}();");
                         }
                     }
