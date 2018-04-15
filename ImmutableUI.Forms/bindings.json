@@ -135,13 +135,9 @@
             ]
         },
         {
-            "name": "Xamarin.Forms.RelativeLayout",
-            "members": [
-            ]
-        },
-        {
             "name": "Xamarin.Forms.StackLayout",
             "members": [
+                { "name": "Children", "default": "null" },
                 { "name": "Orientation", "default": "Xamarin.Forms.StackOrientation.Vertical" },
                 { "name": "Spacing", "default": "6" }
             ]

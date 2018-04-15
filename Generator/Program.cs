@@ -46,6 +46,7 @@ namespace Generator
         public string Name { get; set; }
         public string Default { get; set; }
         public string ConstDefault { get; set; }
+        public string Apply { get; set; }
 
         // Output
         public MemberReference Definition { get; set; }
@@ -118,8 +119,13 @@ namespace Generator
                     }
                     if (tref.IsGenericInstance) {  
                         var n = tref.Name.Substring (0, tref.Name.IndexOf('`'));
+                        var ns = tref.Namespace;
+                        if (tref.IsNested) {
+                            n = tref.DeclaringType.Name + "." + n;
+                            ns = tref.DeclaringType.Namespace;
+                        }
                         var args = string.Join(", ", ((GenericInstanceType)tref).GenericArguments.Select(Name));
-                        return $"{tref.Namespace}.{n}<{args}>";
+                        return $"{ns}.{n}<{args}>";
                     }
                     switch (tref.FullName) {
                         case "System.String": return "string";
@@ -270,19 +276,33 @@ namespace Generator
                     w.WriteLine ($"\t\tbase.Apply(target);");
                 foreach (var m in type.Members) {
                     var bt = ResolveGenericParameter (m.BoundType, h);
-                    if (bindings.FindType (bt.FullName) is TypeBinding b) {
-                        if (bt.IsValueType) {
-                            w.WriteLine ($"\t\ttarget.{m.Name} = {m.Name}.Create{bt.Name}();");
+                    if (!string.IsNullOrEmpty (m.Apply)) {
+                        w.WriteLine ($"\t\t{m.Apply}");
+                    }
+                    else if (GetListItemType (m.BoundType, h) is var etype && etype != null) {
+                        w.WriteLine($"\t\tif ({m.Name} == null || {m.Name}.Count == 0) target.{m.Name}?.Clear();");
+                        w.WriteLine($"\t\telse {{");
+                        w.WriteLine($"\t\t\twhile (target.{m.Name}.Count > {m.Name}.Count) target.{m.Name}.RemoveAt(target.{m.Name}.Count - 1);");
+                        w.WriteLine($"\t\t\tvar n = target.{m.Name}.Count;");
+                        w.WriteLine($"\t\t\tfor (var i = n; i < {m.Name}.Count; i++) target.{m.Name}.Insert(i, {m.Name}[i].Create{etype.Name}());");
+                        w.WriteLine($"\t\t\tfor (var i = 0; i < n; i++) {m.Name}[i].Apply(target.{m.Name}[i]);");
+                        w.WriteLine($"\t\t}}");
+                    }
+                    else {                        
+                        if (bindings.FindType (bt.FullName) is TypeBinding b) {
+                            if (bt.IsValueType) {
+                                w.WriteLine ($"\t\ttarget.{m.Name} = {m.Name}.Create{bt.Name}();");
+                            }
+                            else {
+                                w.WriteLine ($"\t\tif ({m.Name} != null) {{");
+                                w.WriteLine ($"\t\t\tif (target.{m.Name} is {bt.FullName} {m.LowerName}) {m.Name}.Apply({m.LowerName});");
+                                w.WriteLine ($"\t\t\telse target.{m.Name} = {m.Name}.Create{bt.Name}();");
+                                w.WriteLine ($"\t\t}} else target.{m.Name} = null;");
+                            }
                         }
                         else {
-                            w.WriteLine ($"\t\tif ({m.Name} != null) {{");
-                            w.WriteLine ($"\t\t\tif (target.{m.Name} is {bt.FullName} {m.LowerName}) {m.Name}.Apply({m.LowerName});");
-                            w.WriteLine ($"\t\t\telse target.{m.Name} = {m.Name}.Create{bt.Name}();");
-                            w.WriteLine ($"\t\t}} else target.{m.Name} = null;");
+                            w.WriteLine ($"\t\ttarget.{m.Name} = {m.Name};");
                         }
-                    }
-                    else {
-                        w.WriteLine ($"\t\ttarget.{m.Name} = {m.Name};");
                     }
                 }
                 w.WriteLine ("\t}");
@@ -304,6 +324,8 @@ namespace Generator
 
         static TypeReference ResolveGenericParameter (TypeReference tref, IEnumerable<Tuple<TypeReference, TypeDefinition>> h)
         {
+            if (tref == null)
+                return null;
             if (!tref.IsGenericParameter)
                 return tref;
             var q =
@@ -315,6 +337,23 @@ namespace Generator
                 let args = ((GenericInstanceType)b.Item1).GenericArguments
                 select ResolveGenericParameter (args[pi], h);
             return q.First ();
+        }
+
+        static TypeReference GetListItemType (TypeReference tref, IEnumerable<Tuple<TypeReference, TypeDefinition>> h)
+        {
+            var r = ResolveGenericParameter (tref, h);
+            if (r == null)
+                return null;
+            if (r.FullName == "System.String")
+                return null;
+            if (r.Name == "IList`1" && r.IsGenericInstance) {
+                var args = ((GenericInstanceType)r).GenericArguments;
+                return ResolveGenericParameter (args[0], h);
+            }
+            else {
+                var bs = r.Resolve().Interfaces;
+                return bs.Select (b => GetListItemType (b.InterfaceType, h)).FirstOrDefault(b => b != null);
+            }
         }
 
         static PropertyDefinition FindProperty(string name, TypeDefinition type)

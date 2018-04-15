@@ -921,90 +921,39 @@ public partial class LayoutModel : ViewModel
 	}
 }
 
-public partial class RelativeLayoutModel : LayoutModel
-{
-	public RelativeLayoutModel(bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
-		: base(isClippedToBounds, padding) {
-	}
-	public override LayoutModel WithIsClippedToBounds(bool isClippedToBounds) => new RelativeLayoutModel(isClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override LayoutModel WithPadding(Xamarin.Forms.Thickness padding) => new RelativeLayoutModel(IsClippedToBounds, padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new RelativeLayoutModel(IsClippedToBounds, Padding, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new RelativeLayoutModel(IsClippedToBounds, Padding, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new RelativeLayoutModel(IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new RelativeLayoutModel(IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithIsVisible(bool isVisible) => new RelativeLayoutModel(IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithOpacity(double opacity) => new RelativeLayoutModel(IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithWidthRequest(double widthRequest) => new RelativeLayoutModel(IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithHeightRequest(double heightRequest) => new RelativeLayoutModel(IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
-	public override VisualElementModel WithIsEnabled(bool isEnabled) => new RelativeLayoutModel(IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
-	public override bool Equals(object obj) {
-		if (obj == null || GetType() != obj.GetType()) return false;
-		var o = (RelativeLayoutModel)obj;
-		return IsClippedToBounds == o.IsClippedToBounds && Padding == o.Padding && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
-	}
-	public override int GetHashCode() {
-		var hash = base.GetHashCode();
-		return hash;
-	}
-	public virtual Xamarin.Forms.RelativeLayout CreateRelativeLayout() {
-		var target = new Xamarin.Forms.RelativeLayout();
-		Apply(target);
-		return target;
-	}
-	public override Xamarin.Forms.Layout CreateLayout() => CreateRelativeLayout();
-	public override Xamarin.Forms.View CreateView() => CreateRelativeLayout();
-	public override Xamarin.Forms.VisualElement CreateVisualElement() => CreateRelativeLayout();
-	public override Xamarin.Forms.Element CreateElement() => CreateRelativeLayout();
-	public virtual void Apply(Xamarin.Forms.RelativeLayout target) {
-		base.Apply(target);
-	}
-	public override void Apply(Xamarin.Forms.Layout target) {
-		if (target is Xamarin.Forms.RelativeLayout t) Apply(t);
-		else base.Apply(target);
-	}
-	public override void Apply(Xamarin.Forms.View target) {
-		if (target is Xamarin.Forms.RelativeLayout t) Apply(t);
-		else base.Apply(target);
-	}
-	public override void Apply(Xamarin.Forms.VisualElement target) {
-		if (target is Xamarin.Forms.RelativeLayout t) Apply(t);
-		else base.Apply(target);
-	}
-	public override void Apply(Xamarin.Forms.Element target) {
-		if (target is Xamarin.Forms.RelativeLayout t) Apply(t);
-		else base.Apply(target);
-	}
-}
-
 public partial class StackLayoutModel : LayoutModel
 {
+	public System.Collections.Generic.IList<ViewModel> Children { get; }
 	public Xamarin.Forms.StackOrientation Orientation { get; }
 	public double Spacing { get; }
-	public StackLayoutModel(Xamarin.Forms.StackOrientation orientation = Xamarin.Forms.StackOrientation.Vertical, double spacing = 6, bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public StackLayoutModel(System.Collections.Generic.IList<ViewModel> children = null, Xamarin.Forms.StackOrientation orientation = Xamarin.Forms.StackOrientation.Vertical, double spacing = 6, bool isClippedToBounds = false, Xamarin.Forms.Thickness padding = default(Xamarin.Forms.Thickness), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(isClippedToBounds, padding) {
+		Children = children;
 		Orientation = orientation;
 		Spacing = spacing;
 	}
-	public virtual StackLayoutModel WithOrientation(Xamarin.Forms.StackOrientation orientation) => new StackLayoutModel(orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public virtual StackLayoutModel WithSpacing(double spacing) => new StackLayoutModel(Orientation, spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override LayoutModel WithIsClippedToBounds(bool isClippedToBounds) => new StackLayoutModel(Orientation, Spacing, isClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override LayoutModel WithPadding(Xamarin.Forms.Thickness padding) => new StackLayoutModel(Orientation, Spacing, IsClippedToBounds, padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new StackLayoutModel(Orientation, Spacing, IsClippedToBounds, Padding, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new StackLayoutModel(Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new StackLayoutModel(Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new StackLayoutModel(Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithIsVisible(bool isVisible) => new StackLayoutModel(Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithOpacity(double opacity) => new StackLayoutModel(Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithWidthRequest(double widthRequest) => new StackLayoutModel(Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithHeightRequest(double heightRequest) => new StackLayoutModel(Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
-	public override VisualElementModel WithIsEnabled(bool isEnabled) => new StackLayoutModel(Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
+	public virtual StackLayoutModel WithChildren(System.Collections.Generic.IList<ViewModel> children) => new StackLayoutModel(children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual StackLayoutModel WithOrientation(Xamarin.Forms.StackOrientation orientation) => new StackLayoutModel(Children, orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual StackLayoutModel WithSpacing(double spacing) => new StackLayoutModel(Children, Orientation, spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override LayoutModel WithIsClippedToBounds(bool isClippedToBounds) => new StackLayoutModel(Children, Orientation, Spacing, isClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override LayoutModel WithPadding(Xamarin.Forms.Thickness padding) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithIsVisible(bool isVisible) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithOpacity(double opacity) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithWidthRequest(double widthRequest) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithHeightRequest(double heightRequest) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
+	public override VisualElementModel WithIsEnabled(bool isEnabled) => new StackLayoutModel(Children, Orientation, Spacing, IsClippedToBounds, Padding, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (StackLayoutModel)obj;
-		return Orientation == o.Orientation && Spacing == o.Spacing && IsClippedToBounds == o.IsClippedToBounds && Padding == o.Padding && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Children == o.Children && Orientation == o.Orientation && Spacing == o.Spacing && IsClippedToBounds == o.IsClippedToBounds && Padding == o.Padding && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
+		hash = hash * 37 + (Children != null ? Children.GetHashCode() : 0);
 		hash = hash * 37 + Orientation.GetHashCode();
 		hash = hash * 37 + Spacing.GetHashCode();
 		return hash;
@@ -1020,6 +969,13 @@ public partial class StackLayoutModel : LayoutModel
 	public override Xamarin.Forms.Element CreateElement() => CreateStackLayout();
 	public virtual void Apply(Xamarin.Forms.StackLayout target) {
 		base.Apply(target);
+		if (Children == null || Children.Count == 0) target.Children?.Clear();
+		else {
+			while (target.Children.Count > Children.Count) target.Children.RemoveAt(target.Children.Count - 1);
+			var n = target.Children.Count;
+			for (var i = n; i < Children.Count; i++) target.Children.Insert(i, Children[i].CreateView());
+			for (var i = 0; i < n; i++) Children[i].Apply(target.Children[i]);
+		}
 		target.Orientation = Orientation;
 		target.Spacing = Spacing;
 	}
