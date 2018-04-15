@@ -17,6 +17,35 @@ cover UIKit. And I still haven't bound events... wip :-)
 
 4. Note that the label increases.
 
+Here's the UI code for that sample:
+
+```csharp
+using Xamarin.Forms;
+using ImmutableUI.Forms;
+
+public class MainPage : ContentPage
+{
+    public MainPage() => Content = BuildView().CreateView();
+
+    void SetState() => BuildView().Apply(Content);
+
+    int _counter;
+
+    Command _push => new Command(() => {
+        _counter++;
+        SetState();
+    });
+
+    ViewModel BuildView() =>
+        new StackLayoutModel(
+            children: new ViewModel[] {
+                new LabelModel(text: _counter.ToString(), fontSize: 42),
+                new ButtonModel(text: "Increment", command: _push),
+            },
+            padding: new Thickness(42));
+}
+```
+
 
 ## Immutable UI Models
 
