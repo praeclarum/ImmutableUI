@@ -103,27 +103,31 @@ namespace Generator
 
         static void BindType (TypeBinding type, Bindings bindings)
         {
-            string Name (TypeReference t)
-            {
-                switch (t.FullName) {
-                    case "System.String": return "string";
-                    case "System.Boolean": return "bool";
-                    case "System.Int32": return "int";
-                    case "System.Double": return "double";
-                    case "System.Single": return "float";
-                    default:
-                        if (bindings.Types.FirstOrDefault (x => x.Name == t.FullName) is TypeBinding tb)
-                            return tb.BoundName;
-                        return t.FullName;
-                }
-            }
-
             try {
                 var t = type.Definition;
-                var h = GetHierarchy (type.Definition);
-                var bh = h.Select (x => bindings.Types.FirstOrDefault(y => y.Name == x.FullName))
+                var h = GetHierarchy (type.Definition).ToList ();
+                var bh = h.Select (x => bindings.Types.FirstOrDefault(y => y.Name == x.Item2.FullName))
                           .Where (x => x != null)
                           .ToList ();
+
+                string Name (TypeReference tref)
+                {
+                    if (tref.IsGenericParameter) {  
+                        var r = ResolveGenericParameter (tref, h);                      
+                        return Name (r);
+                    }
+                    switch (tref.FullName) {
+                        case "System.String": return "string";
+                        case "System.Boolean": return "bool";
+                        case "System.Int32": return "int";
+                        case "System.Double": return "double";
+                        case "System.Single": return "float";
+                        default:
+                            if (bindings.Types.FirstOrDefault (x => x.Name == tref.FullName) is TypeBinding tb)
+                                return tb.BoundName;
+                            return tref.FullName;
+                    }
+                }
 
                 var ctor = t.Methods
                     .Where (x => x.IsConstructor && x.IsPublic)
@@ -226,7 +230,8 @@ namespace Generator
                 else
                     w.WriteLine($"\t\tvar hash = 17;");
                 foreach (var m in type.Members) {
-                    if (m.BoundType.IsValueType)
+                    var bt = ResolveGenericParameter (m.BoundType, h);
+                    if (bt.IsValueType)
                         w.WriteLine ($"\t\thash = hash * 37 + {m.Name}.GetHashCode();");
                     else
                         w.WriteLine ($"\t\thash = hash * 37 + ({m.Name} != null ? {m.Name}.GetHashCode() : 0);");
@@ -259,13 +264,16 @@ namespace Generator
                 if (baseType != null)
                     w.WriteLine ($"\t\tbase.Apply(target);");
                 foreach (var m in type.Members) {
-                    if (bindings.FindType (m.BoundType.FullName) is TypeBinding b) {
-                        if (m.BoundType.IsValueType) {
-                            w.WriteLine ($"\t\ttarget.{m.Name} = {m.Name}.Create{m.BoundType.Name}();");
+                    var bt = ResolveGenericParameter (m.BoundType, h);
+                    if (bindings.FindType (bt.FullName) is TypeBinding b) {
+                        if (bt.IsValueType) {
+                            w.WriteLine ($"\t\ttarget.{m.Name} = {m.Name}.Create{bt.Name}();");
                         }
                         else {
-                            w.WriteLine ($"\t\tif (target.{m.Name} is {m.BoundType.FullName} t) {m.Name}.Apply(t);");
-                            w.WriteLine ($"\t\telse target.{m.Name} = {m.Name}.Create{m.BoundType.Name}();");
+                            w.WriteLine ($"\t\tif ({m.Name} != null) {{");
+                            w.WriteLine ($"\t\t\tif (target.{m.Name} is {bt.FullName} {m.LowerName}) {m.Name}.Apply({m.LowerName});");
+                            w.WriteLine ($"\t\t\telse target.{m.Name} = {m.Name}.Create{bt.Name}();");
+                            w.WriteLine ($"\t\t}} else target.{m.Name} = null;");
                         }
                     }
                     else {
@@ -289,11 +297,26 @@ namespace Generator
             }
         }
 
+        static TypeReference ResolveGenericParameter (TypeReference tref, IEnumerable<Tuple<TypeReference, TypeDefinition>> h)
+        {
+            if (!tref.IsGenericParameter)
+                return tref;
+            var q =
+                from b in h where b.Item1.IsGenericInstance
+                let ps = b.Item2.GenericParameters
+                let p = ps.FirstOrDefault(x => x.Name == tref.Name)
+                where p != null
+                let pi = ps.IndexOf(p)
+                let args = ((GenericInstanceType)b.Item1).GenericArguments
+                select ResolveGenericParameter (args[pi], h);
+            return q.First ();
+        }
+
         static PropertyDefinition FindProperty(string name, TypeDefinition type)
         {
             var q =
                 from t in GetHierarchy(type)
-                from p in t.Properties
+                from p in t.Item2.Properties
                 where p.Name == name
                 select p;
             return q.FirstOrDefault ();
@@ -303,19 +326,20 @@ namespace Generator
         {
             var q =
                 from t in GetHierarchy(type)
-                from p in t.Events
+                from p in t.Item2.Events
                 where p.Name == name
                 select p;
             return q.FirstOrDefault ();
         }
 
-        static IEnumerable<TypeDefinition> GetHierarchy (TypeDefinition type)
+        static IEnumerable<Tuple<TypeReference, TypeDefinition>> GetHierarchy (TypeDefinition type)
         {
             var d = type;
-            yield return d;
+            yield return Tuple.Create ((TypeReference)d, d);
             while (d.BaseType != null) {
-                d = d.BaseType.Resolve();
-                yield return d;
+                var r = d.BaseType;
+                d = r.Resolve();
+                yield return Tuple.Create (r, d);
             }
         }
 

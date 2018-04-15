@@ -35,6 +35,12 @@
             ]
         },
         {
+            "name": "Xamarin.Forms.BoxView",
+            "members": [
+                { "name": "Color", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" }
+            ]
+        },
+        {
             "name": "Xamarin.Forms.Button",
             "members": [
                 { "name": "Text", "default": "\"\"" }
@@ -47,10 +53,88 @@
             ]
         },
         {
+            "name": "Xamarin.Forms.DatePicker",
+            "members": [
+                { "name": "Date", "default": "default(System.DateTime)" },
+                { "name": "Format", "default": "\"d\"" },
+                { "name": "MinimumDate", "default": "new System.DateTime(1900, 1, 1)", "constDefault": "default(System.DateTime)" },
+                { "name": "MaximumDate", "default": "new System.DateTime(2100, 12, 31)", "constDefault": "default(System.DateTime)" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.Frame",
+            "members": [
+                { "name": "OutlineColor", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" },
+                { "name": "CornerRadius", "default": "-1" },
+                { "name": "HasShadow", "default": "true" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.Image",
+            "members": [
+                { "name": "Source", "default": "null" },
+                { "name": "Aspect", "default": "Xamarin.Forms.Aspect.AspectFit" },
+                { "name": "IsOpaque", "default": "true" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.InputView",
+            "members": [
+                { "name": "Keyboard", "default": "Xamarin.Forms.Keyboard.Default", "constDefault": "default(Xamarin.Forms.Keyboard)" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.Editor",
+            "members": [
+                { "name": "Text", "default": "null" },
+                { "name": "FontSize", "default": "-1" },
+                { "name": "FontFamily", "default": "null" },
+                { "name": "FontAttributes", "default": "Xamarin.Forms.FontAttributes.None" },
+                { "name": "TextColor", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.Entry",
+            "members": [
+                { "name": "Text", "default": "null" },
+                { "name": "Placeholder", "default": "null" },
+                { "name": "HorizontalTextAlignment", "default": "Xamarin.Forms.TextAlignment.Start" },
+                { "name": "FontSize", "default": "-1" },
+                { "name": "FontFamily", "default": "null" },
+                { "name": "FontAttributes", "default": "Xamarin.Forms.FontAttributes.None" },
+                { "name": "TextColor", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" },
+                { "name": "PlaceholderColor", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" },
+                { "name": "IsPassword", "default": "false" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.TimePicker",
+            "members": [
+                { "name": "Time", "default": "new System.TimeSpan(0)", "constDefault": "default(System.TimeSpan)" },
+                { "name": "Format", "default": "\"t\"" },
+                { "name": "TextColor", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.WebView",
+            "members": [
+                { "name": "Source", "default": "null" },
+            ]
+        },
+        {
             "name": "Xamarin.Forms.Page",
             "members": [
                 { "name": "Title", "default": "\"\"" },
                 { "name": "Padding", "default": "default(Xamarin.Forms.Thickness)" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.CarouselPage",
+            "members": [
+                { "name": "ItemsSource", "default": "null" },
+                { "name": "ItemTemplate", "default": "null" },
+                { "name": "SelectedItem", "default": "null" },
+                { "name": "CurrentPage", "default": "null" }
             ]
         },
         {
@@ -60,10 +144,42 @@
             ]
         },
         {
+            "name": "Xamarin.Forms.MasterDetailPage",
+            "members": [
+                { "name": "Master", "default": "null" },
+                { "name": "Detail", "default": "null" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.TabbedPage",
+            "members": [
+                { "name": "ItemsSource", "default": "null" },
+                { "name": "ItemTemplate", "default": "null" },
+                { "name": "SelectedItem", "default": "null" }
+            ]
+        },
+        {
             "name": "Xamarin.Forms.Cell",
             "members": [
                 { "name": "Height", "default": "-1" },
                 { "name": "IsEnabled", "default": "true" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.TextCell",
+            "members": [
+                { "name": "Text", "default": "null" },
+                { "name": "Detail", "default": "null" },
+                { "name": "TextColor", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" },
+                { "name": "DetailColor", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" },
+                { "name": "Command", "default": "null" },
+                { "name": "CommandParameter", "default": "null" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.ImageCell",
+            "members": [
+                { "name": "ImageSource", "default": "null" }
             ]
         },
         {
