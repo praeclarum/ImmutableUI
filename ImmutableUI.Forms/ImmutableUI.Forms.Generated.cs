@@ -203,28 +203,60 @@ public partial class BoxViewModel : ViewModel
 public partial class ButtonModel : ViewModel
 {
 	public string Text { get; }
-	public ButtonModel(string text = "", LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
+	public System.Windows.Input.ICommand Command { get; }
+	public System.Object CommandParameter { get; }
+	public Xamarin.Forms.Button.ButtonContentLayout ContentLayout { get; }
+	public double FontSize { get; }
+	public string FontFamily { get; }
+	public Xamarin.Forms.FontAttributes FontAttributes { get; }
+	public double BorderWidth { get; }
+	public Xamarin.Forms.Color BorderColor { get; }
+	public ButtonModel(string text = null, System.Windows.Input.ICommand command = null, System.Object commandParameter = null, Xamarin.Forms.Button.ButtonContentLayout contentLayout = default(Xamarin.Forms.Button.ButtonContentLayout), double fontSize = -1, string fontFamily = null, Xamarin.Forms.FontAttributes fontAttributes = Xamarin.Forms.FontAttributes.None, double borderWidth = -1, Xamarin.Forms.Color borderColor = default(Xamarin.Forms.Color), LayoutOptionsModel horizontalOptions = null, LayoutOptionsModel verticalOptions = null, Xamarin.Forms.Thickness margin = default(Xamarin.Forms.Thickness), Xamarin.Forms.Color backgroundColor = default(Xamarin.Forms.Color), bool isVisible = true, double opacity = 1, double widthRequest = -1, double heightRequest = -1, bool isEnabled = true)
 		: base(horizontalOptions, verticalOptions, margin) {
 		Text = text;
+		Command = command;
+		CommandParameter = commandParameter;
+		ContentLayout = contentLayout == default(Xamarin.Forms.Button.ButtonContentLayout) ? new Xamarin.Forms.Button.ButtonContentLayout(Xamarin.Forms.Button.ButtonContentLayout.ImagePosition.Left, 10) : contentLayout;
+		FontSize = fontSize;
+		FontFamily = fontFamily;
+		FontAttributes = fontAttributes;
+		BorderWidth = borderWidth;
+		BorderColor = borderColor == default(Xamarin.Forms.Color) ? Xamarin.Forms.Color.Default : borderColor;
 	}
-	public virtual ButtonModel WithText(string text) => new ButtonModel(text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ButtonModel(Text, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ButtonModel(Text, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithIsVisible(bool isVisible) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithOpacity(double opacity) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, opacity, WidthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithWidthRequest(double widthRequest) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
-	public override VisualElementModel WithHeightRequest(double heightRequest) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
-	public override VisualElementModel WithIsEnabled(bool isEnabled) => new ButtonModel(Text, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
+	public virtual ButtonModel WithText(string text) => new ButtonModel(text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual ButtonModel WithCommand(System.Windows.Input.ICommand command) => new ButtonModel(Text, command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual ButtonModel WithCommandParameter(System.Object commandParameter) => new ButtonModel(Text, Command, commandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual ButtonModel WithContentLayout(Xamarin.Forms.Button.ButtonContentLayout contentLayout) => new ButtonModel(Text, Command, CommandParameter, contentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual ButtonModel WithFontSize(double fontSize) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, fontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual ButtonModel WithFontFamily(string fontFamily) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, fontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual ButtonModel WithFontAttributes(Xamarin.Forms.FontAttributes fontAttributes) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, fontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual ButtonModel WithBorderWidth(double borderWidth) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, borderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public virtual ButtonModel WithBorderColor(Xamarin.Forms.Color borderColor) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, borderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithHorizontalOptions(LayoutOptionsModel horizontalOptions) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, horizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithVerticalOptions(LayoutOptionsModel verticalOptions) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, verticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override ViewModel WithMargin(Xamarin.Forms.Thickness margin) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithBackgroundColor(Xamarin.Forms.Color backgroundColor) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, backgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithIsVisible(bool isVisible) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, isVisible, Opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithOpacity(double opacity) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, opacity, WidthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithWidthRequest(double widthRequest) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, widthRequest, HeightRequest, IsEnabled);
+	public override VisualElementModel WithHeightRequest(double heightRequest) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, heightRequest, IsEnabled);
+	public override VisualElementModel WithIsEnabled(bool isEnabled) => new ButtonModel(Text, Command, CommandParameter, ContentLayout, FontSize, FontFamily, FontAttributes, BorderWidth, BorderColor, HorizontalOptions, VerticalOptions, Margin, BackgroundColor, IsVisible, Opacity, WidthRequest, HeightRequest, isEnabled);
 	public override bool Equals(object obj) {
 		if (obj == null || GetType() != obj.GetType()) return false;
 		var o = (ButtonModel)obj;
-		return Text == o.Text && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
+		return Text == o.Text && Command == o.Command && CommandParameter == o.CommandParameter && ContentLayout == o.ContentLayout && FontSize == o.FontSize && FontFamily == o.FontFamily && FontAttributes == o.FontAttributes && BorderWidth == o.BorderWidth && BorderColor == o.BorderColor && HorizontalOptions == o.HorizontalOptions && VerticalOptions == o.VerticalOptions && Margin == o.Margin && BackgroundColor == o.BackgroundColor && IsVisible == o.IsVisible && Opacity == o.Opacity && WidthRequest == o.WidthRequest && HeightRequest == o.HeightRequest && IsEnabled == o.IsEnabled;
 	}
 	public override int GetHashCode() {
 		var hash = base.GetHashCode();
 		hash = hash * 37 + (Text != null ? Text.GetHashCode() : 0);
+		hash = hash * 37 + (Command != null ? Command.GetHashCode() : 0);
+		hash = hash * 37 + (CommandParameter != null ? CommandParameter.GetHashCode() : 0);
+		hash = hash * 37 + (ContentLayout != null ? ContentLayout.GetHashCode() : 0);
+		hash = hash * 37 + FontSize.GetHashCode();
+		hash = hash * 37 + (FontFamily != null ? FontFamily.GetHashCode() : 0);
+		hash = hash * 37 + FontAttributes.GetHashCode();
+		hash = hash * 37 + BorderWidth.GetHashCode();
+		hash = hash * 37 + BorderColor.GetHashCode();
 		return hash;
 	}
 	public virtual Xamarin.Forms.Button CreateButton() {
@@ -238,6 +270,14 @@ public partial class ButtonModel : ViewModel
 	public virtual void Apply(Xamarin.Forms.Button target) {
 		base.Apply(target);
 		target.Text = Text;
+		target.Command = Command;
+		target.CommandParameter = CommandParameter;
+		target.ContentLayout = ContentLayout;
+		target.FontSize = FontSize;
+		target.FontFamily = FontFamily;
+		target.FontAttributes = FontAttributes;
+		target.BorderWidth = BorderWidth;
+		target.BorderColor = BorderColor;
 	}
 	public override void Apply(Xamarin.Forms.View target) {
 		if (target is Xamarin.Forms.Button t) Apply(t);

@@ -130,7 +130,7 @@ namespace Generator
                         default:
                             if (bindings.Types.FirstOrDefault (x => x.Name == tref.FullName) is TypeBinding tb)
                                 return tb.BoundName;
-                            return tref.FullName;
+                            return tref.FullName.Replace('/', '.');
                     }
                 }
 
