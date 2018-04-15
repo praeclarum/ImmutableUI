@@ -32,7 +32,9 @@ For example, `Xamarin.Forms.Button` has an immutable counterpart named `Immutabl
 
 ### Thread Safety
 
-UI Model objects can be used on multiple threads simulataneously since there's no risk of corrupting state.
+UI Model objects can be used on multiple threads simulataneously since there's no risk of corrupting state. This means they can be shared
+between the UI thread and background workers without the need for
+synchronization.
 
 ### Sharing
 
@@ -51,10 +53,13 @@ sometimes you just want to set a property. Well, you still can't quite do
 that, but this library does provide a fluent interface to help out. Here it is in action:
 
 ```csharp
-var basicButton = new Button().WithFontSize(24).WithTextColor(Color.Green);
+var basicButton = new ButtonModel().WithFontSize(24).WithTextColor(Color.Green);
 var okButton = basicButton.WithText("OK").WithCommand(ok);
 var cancelButton = basicButton.WithText("Cancel").WithTextColor(Color.Red).WithCommand(cancel);
 ```
+
+Note that the `basicButton` above is being used like a template -
+a fun little use of this fluent capability.
 
 ### Complete Constructors
 
@@ -67,7 +72,7 @@ everything.
 The fluent example above would can be written using constructors:
 
 ```csharp
-var basicButton = new Button(fontSize: 24, textColor: Color.Green);
+var basicButton = new ButtonModel(fontSize: 24, textColor: Color.Green);
 ```
 
 ### Serializable
