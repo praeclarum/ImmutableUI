@@ -12,6 +12,10 @@
             "name": "Xamarin.Forms.VisualElement",
             "members": [
                 { "name": "BackgroundColor", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" },
+                { "name": "IsVisible", "default": "true" },
+                { "name": "Opacity", "default": "1" },
+                { "name": "WidthRequest", "default": "-1" },
+                { "name": "HeightRequest", "default": "-1" },
                 { "name": "IsEnabled", "default": "true" }
             ]
         },
@@ -66,6 +70,18 @@
             "name": "Xamarin.Forms.ViewCell",
             "members": [
                 { "name": "View", "default": "null" }
+            ]
+        },
+        {
+            "name": "Xamarin.Forms.ListView",
+            "members": [
+                { "name": "ItemsSource", "default": "null" },
+                { "name": "ItemTemplate", "default": "null" },
+                { "name": "SelectedItem", "default": "null" },
+                { "name": "SeparatorVisibility", "default": "Xamarin.Forms.SeparatorVisibility.Default" },
+                { "name": "SeparatorColor", "default": "Xamarin.Forms.Color.Default", "constDefault": "default(Xamarin.Forms.Color)" },
+                { "name": "HasUnevenRows", "default": "false" },
+                { "name": "RowHeight", "default": "-1" }
             ]
         }
     ]
